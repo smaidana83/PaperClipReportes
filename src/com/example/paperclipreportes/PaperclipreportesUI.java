@@ -30,7 +30,7 @@ public class PaperclipreportesUI extends UI {
 		Button button = new Button("HACE click AQUI");
 		button.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				layout.addComponent(new Label("Thank you for clicking TEST"));
+				layout.addComponent(new Label("Thank you for clicking TEST GRACIAS"));
 			}
 		});
 		layout.addComponent(button);
