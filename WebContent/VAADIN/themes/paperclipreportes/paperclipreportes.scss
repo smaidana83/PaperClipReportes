@@ -33,4 +33,32 @@
   @include valo;
 
   // Insert your own theme rules here
+/* Various general settings */
+.flexwrap {
+    background: black;
+    color: white;
+
+    .title {
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 30px;
+        padding: 5px;
+    }
+
+    .itembox {
+        white-space: normal;
+        vertical-align: top;
+    }
+
+    .itembox.v-label {padding: 5px}
 }
+
+.flexwrap[width-range~="0-499px"] {
+    .itembox {width: 100%}
+}
+
+.flexwrap[width-range~="500px-"] {
+    .itembox {width: 50%}
+}
+}
+
