@@ -4,16 +4,22 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import datos.Datos;
+import valueObject.VOFlujoCaja;
 
 @SuppressWarnings("serial")
 @Theme("paperclipreportes")
@@ -38,7 +44,8 @@ public class PaperclipreportesUI extends UI {
 		//reporte1.addStyleName("myresponsive");	
 		reporte1.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				layout.addComponent(new Label("Seleccionaste reporte1"));
+				Datos datos = new Datos();
+				layout.addComponent(new Label("Total en Caja: " + datos.TotalEnCaja()));				
 			}
 		});
 
@@ -47,6 +54,14 @@ public class PaperclipreportesUI extends UI {
 		reporte2.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				layout.addComponent(new Label("Seleccionaste reporte2"));
+				Datos datos = new Datos();
+				
+				final BeanItemContainer<VOFlujoCaja> ds = 
+					    new BeanItemContainer<VOFlujoCaja>(VOFlujoCaja.class, datos.FlujoDeCaja());
+				Grid grid = new Grid("Flujo de Caja", ds);				
+				layout.addComponent(grid);
+				
+				
 			}
 		});
 		
