@@ -41,7 +41,7 @@ public class Datos {
 	    Connection conn = null;
 	    PreparedStatement preparedStatement = null;
 	    
-	    double total=0;
+	    double total=0.00;
 	    try{		
 	    	String sql = "select( " +
 						/*obtengo el ultimo movimiento*/
