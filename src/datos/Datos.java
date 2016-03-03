@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import utils.Utils;
 import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
@@ -36,7 +37,7 @@ public class Datos {
 	/**
 	 * Devuelve el total de la caja dada una fecha	
 	 */
-	public double TotalEnCaja (String fecha){		
+	public double TotalEnCaja (Date fecha){		
 	    ResultSet rs = null;
 	    Connection conn = null;
 	    PreparedStatement preparedStatement = null;
@@ -64,8 +65,8 @@ public class Datos {
 		
 	    	conn = this.getConnection();	
 	    	preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, fecha);
-			preparedStatement.setString(2, fecha);
+			preparedStatement.setString(1, Utils.convertDateToString(fecha));
+			preparedStatement.setString(2, Utils.convertDateToString(fecha));
 			rs = preparedStatement.executeQuery();        
 	        
 	        if(rs.next()){
