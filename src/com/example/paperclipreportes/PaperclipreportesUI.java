@@ -12,17 +12,19 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.Navigator.ComponentContainerViewDisplay;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Responsive;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 
+import grafica.FlujoDeCaja;
 import grafica.TotalEnCaja;
 import utils.MyConverterFactory;
 
@@ -32,7 +34,12 @@ public class PaperclipreportesUI extends UI {
 	private GridLayout mainLayout;
 	private VerticalLayout contentLayout;  
 	private Navigator contentNavigator;	
+	//protected static final String TOTALENCAJA = "totalEnCaja";
 	protected static final String TOTALENCAJA = "totalEnCaja";
+	//protected static final String FLUJODECAJA = "flujoDeCaja";
+	protected static final String FLUJODECAJA = "";
+	protected static final String DEUDORES = "deudores";
+	protected static final String DESGLOCEDEVENTAS = "desgloceDeVentas";
 	
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -64,25 +71,64 @@ public class PaperclipreportesUI extends UI {
 		//Logo
 		FileResource paperClipLogoResource = new FileResource(new File(basepath +"/WEB-INF/images/logo.png"));		
 		Image paperClipLogo = new Image(null, paperClipLogoResource);
+		paperClipLogo.setHeight("80%");
+		//paperClipLogo.setWidth("80%");
+		
 		mainLayout.addComponent(paperClipLogo, 0,0);
+		
+		//MenuBar
+		MenuBar menuPrincipal = new MenuBar();
+		mainLayout.addComponent(menuPrincipal,0,1);
+		
+		MenuBar.Command menuCommand = new MenuBar.Command() {
+			public void menuSelected(MenuItem selectedItem) {
+			switch(selectedItem.getText()){
+			case "Total en caja":
+				contentNavigator.navigateTo(TOTALENCAJA);
+				break;
+			case "Flujo de caja":
+				contentNavigator.navigateTo(FLUJODECAJA);
+				break;
+			case "Deudores":
+				System.out.println("Deudores");
+				break;
+			case "Desgloce de ventas":
+				System.out.println("Desgloce de ventas");
+				break;
+			default:
+				System.out.println("Selecciono uno no valido");
+				break;
+				
+			}
+			}
+			};
+		
+				
+		MenuItem reportes = menuPrincipal.addItem("", new ThemeResource("icons/menu.png"), null);
+		reportes.setStyleName("menuPrincipal");
+		
+		MenuItem totalEnCaja = reportes.addItem("Total en caja", menuCommand);
+		MenuItem flujoDeCaja = reportes.addItem("Flujo de caja", menuCommand);
+		MenuItem deudores = reportes.addItem("Deudores", menuCommand);
+		MenuItem desgloceDeVentas = reportes.addItem("Desgloce de ventas", menuCommand);
+		
+		
+				
+				
+		
 
 		//Navigator
 		ComponentContainerViewDisplay viewDisplay = new ComponentContainerViewDisplay(contentLayout);
 		contentNavigator = new Navigator(this, viewDisplay);
-		mainLayout.addComponent(contentLayout,0,1,2,1);
+		mainLayout.addComponent(contentLayout,0,2,2,2);
 		
-		contentNavigator.addView("", new TotalEnCaja());	
+		//Carga de las paginas		
+		contentNavigator.addView(TOTALENCAJA, new TotalEnCaja());
+		contentNavigator.addView(FLUJODECAJA, new FlujoDeCaja());
 		
-		
-//		Button btnTotalCaja = new Button("Total en Caja");
-//		headerLayout.addComponent(btnTotalCaja);				
-//		btnTotalCaja.addClickListener(new Button.ClickListener() {
-//			public void buttonClick(ClickEvent event) {
-//				Datos datos = new Datos();
-//				mainLayout.addComponent(new Label("Total en Caja: " + datos.TotalEnCaja("20140822")));				
-//			}
-//		});
-//
+//		contentNavigator.addView(DEUDORES, new Deudores());
+//		contentNavigator.addView(DESGLOCEDEVENTAS, new DesgloceDeVentas());
+
 //		Button btnFlujoCaja = new Button("Flujo de Caja");
 //		headerLayout.addComponent(btnFlujoCaja);		
 //		btnFlujoCaja.addClickListener(new Button.ClickListener() {

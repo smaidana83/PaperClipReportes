@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import utils.Utils;
+import valueObject.VOMoneda;
 import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
@@ -37,7 +37,7 @@ public class Datos {
 	/**
 	 * Devuelve el total de la caja dada una fecha	
 	 */
-	public double TotalEnCaja (Date fecha){		
+	public double TotalEnCaja (String fecha){		
 	    ResultSet rs = null;
 	    Connection conn = null;
 	    PreparedStatement preparedStatement = null;
@@ -65,8 +65,8 @@ public class Datos {
 		
 	    	conn = this.getConnection();	
 	    	preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, Utils.convertDateToString(fecha));
-			preparedStatement.setString(2, Utils.convertDateToString(fecha));
+			preparedStatement.setString(1, fecha);
+			preparedStatement.setString(2, fecha);
 			rs = preparedStatement.executeQuery();        
 	        
 	        if(rs.next()){
@@ -103,9 +103,9 @@ public class Datos {
 	}
 	
 	/***
-	 * Devuelve un array con el flujo de la caja segun una fecha dada	
+	 * Devuelve un array con el flujo de la caja segun una fecha dada y la moneda
 	 */
-	public ArrayList<VOFlujoCaja> FlujoDeCaja(String fecha){		
+	public ArrayList<VOFlujoCaja> FlujoDeCaja(String fecha, int idMoneda){		
 		PreparedStatement stmt = null;
 	    ResultSet rs = null;
 	    Connection conn = null;
@@ -120,10 +120,12 @@ public class Datos {
 							"on mc.id_tipo_movimiento = mov.id "+	
 						"where mc.str_fecha like ? "+ 
 							"and mc.id_tipo_movimiento != 10 "+
-							"and mc.id_tipo_movimiento != 9 ";
+							"and mc.id_tipo_movimiento != 9 "+
+							"and mc.id_moneda = ? ";
 	    	conn = this.getConnection();
 	    	stmt = conn.prepareStatement(sql);
-	    	stmt.setString(1, fecha);			
+	    	stmt.setString(1, fecha);		
+	    	stmt.setInt(2, idMoneda);
 	    	rs = stmt.executeQuery(); 
 	        
 	        while(rs.next()){
@@ -243,7 +245,7 @@ public class Datos {
 	/**
 	 * Devuelve los deudores segun una moneda 	 
 	 */
-	public ArrayList<VODesgloce> DegloceVentas(String fecha){		
+	public ArrayList<VODesgloce> DesgloceVentas(String fecha){		
 		PreparedStatement stmt = null;
 	    ResultSet rs = null;
 	    Connection conn = null;
@@ -306,5 +308,60 @@ public class Datos {
 	         }
 	      }
 	    return arrayDesgloce;
+	}
+	
+	/**
+	 * Obtener las monedas del sistema
+	 */
+	public ArrayList<VOMoneda> ObtenerMonedas(){
+		PreparedStatement stmt = null;
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    ArrayList<VOMoneda> arrayMoneda = new ArrayList<VOMoneda>();
+	    
+	    try{
+	    	String sql =  "select id as 'Id', str_descrip as 'Descripcion', str_simbolo as 'Simbolo' "+
+	    			"from Monedas ";	
+	    	conn = this.getConnection();
+	    	stmt = conn.prepareStatement(sql);	    		    	
+	    	rs = stmt.executeQuery(); 
+	        
+	        while(rs.next()){
+	        	VOMoneda voMoneda = new VOMoneda();        	
+	        	
+	        	voMoneda.setId(rs.getInt("Id"));
+	        	voMoneda.setDescripcion(rs.getString("Descripcion"));
+	        	voMoneda.setSimbolo(rs.getString("Simbolo"));
+	        	arrayMoneda.add(voMoneda);
+	        }	        
+	        
+	    } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (stmt != null){
+	        	 try { 
+	        		 stmt.close(); 
+       		 } catch(Exception e) {
+       			 
+       		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return arrayMoneda;
+		
 	}
 }

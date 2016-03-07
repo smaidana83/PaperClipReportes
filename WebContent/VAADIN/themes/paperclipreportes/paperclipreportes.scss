@@ -185,5 +185,9 @@
   	margin: 0 auto;
   }
 
+	
+.v-menubar-menuitem-menuPrincipal .v-menubar-submenu-indicator + .v-menubar-menuitem-caption:after {
+      content: none;
+  }
 }
 
