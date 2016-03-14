@@ -23,7 +23,10 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
+import grafica.DesgloceDeVentas;
+import grafica.Deudores;
 import grafica.FlujoDeCaja;
 import grafica.TotalEnCaja;
 import utils.MyConverterFactory;
@@ -31,13 +34,13 @@ import utils.MyConverterFactory;
 @SuppressWarnings("serial")
 @Theme("paperclipreportes")
 public class PaperclipreportesUI extends UI {
-	private GridLayout mainLayout;
+	//private GridLayout mainLayout;
+	private VerticalLayout mainLayout;
 	private VerticalLayout contentLayout;  
 	private Navigator contentNavigator;	
-	//protected static final String TOTALENCAJA = "totalEnCaja";
-	protected static final String TOTALENCAJA = "totalEnCaja";
-	//protected static final String FLUJODECAJA = "flujoDeCaja";
-	protected static final String FLUJODECAJA = "";
+	protected static final String TOTALENCAJA = "";
+//	protected static final String TOTALENCAJA = "totalEnCaja";
+	protected static final String FLUJODECAJA = "flujoDeCaja";	
 	protected static final String DEUDORES = "deudores";
 	protected static final String DESGLOCEDEVENTAS = "desgloceDeVentas";
 	
@@ -54,15 +57,17 @@ public class PaperclipreportesUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
-		mainLayout = new GridLayout(3,3);
+		//mainLayout = new GridLayout(3,3);
+		mainLayout = new VerticalLayout();
 		contentLayout = new VerticalLayout();
-					
+		
 		VaadinSession.getCurrent().setConverterFactory(new MyConverterFactory());
 		setLocale(new Locale("es", "UY"));
 		mainLayout.setMargin(true);
-		setContent(mainLayout);		
-		mainLayout.setSizeFull();		
-		Responsive.makeResponsive(mainLayout);		
+		setContent(mainLayout);				
+		mainLayout.setWidth("100%");		
+		Responsive.makeResponsive(this);
+		
 				
 		
 		//Ruta base de la aplicacion
@@ -74,11 +79,13 @@ public class PaperclipreportesUI extends UI {
 		paperClipLogo.setHeight("80%");
 		//paperClipLogo.setWidth("80%");
 		
-		mainLayout.addComponent(paperClipLogo, 0,0);
+		//mainLayout.addComponent(paperClipLogo, 0,0);
+		mainLayout.addComponent(paperClipLogo);
 		
 		//MenuBar
 		MenuBar menuPrincipal = new MenuBar();
-		mainLayout.addComponent(menuPrincipal,0,1);
+		//mainLayout.addComponent(menuPrincipal,0,1);		
+		mainLayout.addComponent(menuPrincipal);	
 		
 		MenuBar.Command menuCommand = new MenuBar.Command() {
 			public void menuSelected(MenuItem selectedItem) {
@@ -90,10 +97,10 @@ public class PaperclipreportesUI extends UI {
 				contentNavigator.navigateTo(FLUJODECAJA);
 				break;
 			case "Deudores":
-				System.out.println("Deudores");
+				contentNavigator.navigateTo(DEUDORES);
 				break;
 			case "Desgloce de ventas":
-				System.out.println("Desgloce de ventas");
+				contentNavigator.navigateTo(DESGLOCEDEVENTAS);
 				break;
 			default:
 				System.out.println("Selecciono uno no valido");
@@ -118,54 +125,20 @@ public class PaperclipreportesUI extends UI {
 		
 
 		//Navigator
+		
+		//contentLayout.setMargin(true);
+		//contentLayout.setSizeFull();
 		ComponentContainerViewDisplay viewDisplay = new ComponentContainerViewDisplay(contentLayout);
 		contentNavigator = new Navigator(this, viewDisplay);
-		mainLayout.addComponent(contentLayout,0,2,2,2);
+		//mainLayout.addComponent(contentLayout,0,2,2,2);
+		mainLayout.addComponent(contentLayout);
 		
 		//Carga de las paginas		
 		contentNavigator.addView(TOTALENCAJA, new TotalEnCaja());
 		contentNavigator.addView(FLUJODECAJA, new FlujoDeCaja());
 		
-//		contentNavigator.addView(DEUDORES, new Deudores());
-//		contentNavigator.addView(DESGLOCEDEVENTAS, new DesgloceDeVentas());
-
-//		Button btnFlujoCaja = new Button("Flujo de Caja");
-//		headerLayout.addComponent(btnFlujoCaja);		
-//		btnFlujoCaja.addClickListener(new Button.ClickListener() {
-//			public void buttonClick(ClickEvent event) {				
-//				Datos datos = new Datos();				
-//				final BeanItemContainer<VOFlujoCaja> ds = new BeanItemContainer<VOFlujoCaja>(VOFlujoCaja.class, datos.FlujoDeCaja("20140822"));
-//				Grid grid = new Grid("Flujo de Caja", ds);
-//				grid.setSizeFull();
-//				mainLayout.addComponent(grid);				
-//			}
-//		});
-//		
-//		Button btnDeudores = new Button("Deudores");
-//		headerLayout.addComponent(btnDeudores);
-//		btnDeudores.setCaption("Deudores");
-//		btnDeudores.addClickListener(new Button.ClickListener() {
-//			public void buttonClick(ClickEvent event) {
-//				Datos datos = new Datos();				
-//				final BeanItemContainer<VODeudores> ds = new BeanItemContainer<VODeudores>(VODeudores.class, datos.Deudores(1));
-//				Grid grid = new Grid("Deudores", ds);
-//				grid.setSizeFull();
-//				mainLayout.addComponent(grid);		
-//			}
-//		});
-//		
-//		Button btnDegloceVentas = new Button("Desgloce Ventas");
-//		headerLayout.addComponent(btnDegloceVentas);		
-//		btnDegloceVentas.addClickListener(new Button.ClickListener() {
-//			public void buttonClick(ClickEvent event) {
-//				Datos datos = new Datos();				
-//				final BeanItemContainer<VODesgloce> ds = new BeanItemContainer<VODesgloce>(VODesgloce.class, datos.DegloceVentas("20140822"));
-//				Grid grid = new Grid("Desgloce de Ventas", ds);
-//				grid.setSizeFull();
-//				mainLayout.addComponent(grid);	
-//			}
-//		});
-		
+		contentNavigator.addView(DEUDORES, new Deudores());
+		contentNavigator.addView(DESGLOCEDEVENTAS, new DesgloceDeVentas());		
 	}
 
 }
