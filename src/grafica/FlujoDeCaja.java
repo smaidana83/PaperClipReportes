@@ -8,6 +8,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
@@ -73,8 +74,11 @@ public class FlujoDeCaja extends CustomComponent implements View {
 		mainLayout.setSpacing(true);		
 		mainLayout.setImmediate(true);
 		mainLayout.setWidth("100%");
+		mainLayout.setDefaultComponentAlignment(Alignment.TOP_CENTER);
 		
 		lblTitle = new Label("Flujo de caja");
+		lblTitle.setSizeUndefined();
+		lblTitle.setStyleName("h2");
 		mainLayout.addComponent(lblTitle);
 		
 		firstRow = new HorizontalLayout();	
@@ -94,6 +98,7 @@ public class FlujoDeCaja extends CustomComponent implements View {
 		
 		lblMessage = new Label("");
 		lblMessage.setStyleName("messageAlert");
+		lblMessage.setSizeUndefined();
 		mainLayout.addComponent(lblMessage);
 		
 		grdFlujo = new Grid();		

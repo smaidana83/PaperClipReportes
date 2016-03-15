@@ -7,6 +7,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
@@ -64,8 +65,11 @@ public class TotalEnCaja extends CustomComponent implements View {
 		mainLayout.setSpacing(true);		
 		mainLayout.setImmediate(true);
 		mainLayout.setWidth("100%");
+		mainLayout.setDefaultComponentAlignment(Alignment.TOP_CENTER);
 		
 		lblTitle = new Label("Total en caja");	
+		lblTitle.setSizeUndefined();
+		lblTitle.setStyleName("h2");
 		mainLayout.addComponent(lblTitle);
 		
 		date = new PopupDateField();		
@@ -73,16 +77,15 @@ public class TotalEnCaja extends CustomComponent implements View {
 		mainLayout.addComponent(date);
 		
 		lblMessage = new Label("");
+		lblMessage.setSizeUndefined();
 		lblMessage.addStyleName("messageAlert");
+		mainLayout.addComponent(lblMessage);
 		
 		txtTotal = new TextField();	
 		txtTotal.setCaption("Total");
 		txtTotal.setConverter(Double.class);
 		mainLayout.addComponent(txtTotal);
 				
-		
-	
-		
 		
 		return mainLayout;
 	}

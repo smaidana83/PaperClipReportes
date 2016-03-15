@@ -8,6 +8,8 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.event.MouseEvents.ClickEvent;
+import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.Navigator.ComponentContainerViewDisplay;
 import com.vaadin.server.FileResource;
@@ -17,6 +19,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.MenuBar;
@@ -46,7 +49,7 @@ public class PaperclipreportesUI extends UI {
 	
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = PaperclipreportesUI.class)
+	@VaadinServletConfiguration(productionMode = false, ui = PaperclipreportesUI.class, widgetset = "com.example.paperclipreportes.widgetset.PaperclipreportesWidgetset")
 	public static class Servlet extends VaadinServlet {		
         protected void servletInitialized() throws ServletException {
             super.servletInitialized();
@@ -64,6 +67,7 @@ public class PaperclipreportesUI extends UI {
 		VaadinSession.getCurrent().setConverterFactory(new MyConverterFactory());
 		setLocale(new Locale("es", "UY"));
 		mainLayout.setMargin(true);
+		mainLayout.setSpacing(true);
 		setContent(mainLayout);				
 		mainLayout.setWidth("100%");		
 		Responsive.makeResponsive(this);
@@ -76,13 +80,20 @@ public class PaperclipreportesUI extends UI {
 		//Logo
 		FileResource paperClipLogoResource = new FileResource(new File(basepath +"/WEB-INF/images/logo.png"));		
 		Image paperClipLogo = new Image(null, paperClipLogoResource);
-		paperClipLogo.setHeight("80%");
-		//paperClipLogo.setWidth("80%");
-		
-		//mainLayout.addComponent(paperClipLogo, 0,0);
+		paperClipLogo.setHeight("63px");
+		paperClipLogo.setWidth("184.2px");			
 		mainLayout.addComponent(paperClipLogo);
 		
-		//MenuBar
+		paperClipLogo.addClickListener(new ClickListener() {
+			
+			@Override
+			public void click(ClickEvent event) {
+				// TODO Auto-generated method stub
+				contentNavigator.navigateTo("");
+			}
+		});
+		
+		//MenuBar	
 		MenuBar menuPrincipal = new MenuBar();
 		//mainLayout.addComponent(menuPrincipal,0,1);		
 		mainLayout.addComponent(menuPrincipal);	
@@ -130,8 +141,9 @@ public class PaperclipreportesUI extends UI {
 		//contentLayout.setSizeFull();
 		ComponentContainerViewDisplay viewDisplay = new ComponentContainerViewDisplay(contentLayout);
 		contentNavigator = new Navigator(this, viewDisplay);
-		//mainLayout.addComponent(contentLayout,0,2,2,2);
+		//mainLayout.addComponent(contentLayout,0,2,2,2);		
 		mainLayout.addComponent(contentLayout);
+		
 		
 		//Carga de las paginas		
 		contentNavigator.addView(TOTALENCAJA, new TotalEnCaja());

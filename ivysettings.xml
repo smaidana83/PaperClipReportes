@@ -23,6 +23,8 @@
 						pattern="http://dev.vaadin.com/svn/versions/6.8/build/smartsprites/lib/[artifact](-[revision]).[ext]" />
 				</url>
 			</dual>
+			<!-- DCharts -->
+			<ibiblio name="vaadin-addons" usepoms="true" m2compatible="true" root="http://maven.vaadin.com/vaadin-addons" />
 		</chain>
 	</resolvers>
 	<modules>

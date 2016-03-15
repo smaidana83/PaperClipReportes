@@ -1,0 +1,1 @@
+$wnd.com_example_paperclipreportes_widgetset_PaperclipreportesWidgetset.runAsyncCallback2('xdb(1603,1,O0d);_.vc=function Rgc(){R1b((!K1b&&(K1b=new W1b),K1b),this.a.d)};nWd(Th)(2);\n//# sourceURL=com.example.paperclipreportes.widgetset.PaperclipreportesWidgetset-2.js\n')
