@@ -25,12 +25,16 @@ public class Logica {
 		return datos.Deudores(idMoneda);
 	}
 	
-	public ArrayList<VODesgloce> DesgloceVentas(Date fecha){
-		return datos.DesgloceVentas(Utils.convertDateToString(fecha));
+	public ArrayList<VODesgloce> DesgloceVentasDiario(Date fecha){
+		return datos.DesgloceVentasDiario(Utils.convertDateToString(fecha));
 	}
 	
 	public ArrayList<VOMoneda> ObtenerMonedas(){
 		return datos.ObtenerMonedas();
+	}
+	
+	public ArrayList<VODesgloce> DesgloceVentasMensual(Date fecha){
+		return null;
 	}
 
 }

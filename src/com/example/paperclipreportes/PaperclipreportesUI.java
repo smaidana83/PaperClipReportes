@@ -28,7 +28,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import grafica.DesgloceDeVentas;
+import grafica.DesgloceDeVentasDiario;
 import grafica.Deudores;
 import grafica.FlujoDeCaja;
 import grafica.TotalEnCaja;
@@ -150,7 +150,7 @@ public class PaperclipreportesUI extends UI {
 		contentNavigator.addView(FLUJODECAJA, new FlujoDeCaja());
 		
 		contentNavigator.addView(DEUDORES, new Deudores());
-		contentNavigator.addView(DESGLOCEDEVENTAS, new DesgloceDeVentas());		
+		contentNavigator.addView(DESGLOCEDEVENTAS, new DesgloceDeVentasDiario());		
 	}
 
 }

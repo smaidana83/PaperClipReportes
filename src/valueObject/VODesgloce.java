@@ -15,5 +15,5 @@ public class VODesgloce {
 	}
 	public void setRubro(String rubro) {
 		this.rubro = rubro;
-	}	
+	}
 }

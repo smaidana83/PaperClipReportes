@@ -112,7 +112,7 @@ public class Datos {
 	    ArrayList<VOFlujoCaja> arrayFlujoCaja = new ArrayList<VOFlujoCaja>();
 	    
 	    try{
-	    	String sql = "select mc.str_fecha as 'Fecha', mc.dob_debe as 'Debito', mc.dob_haber as 'Credito', mc.dob_saldo 'Saldo', mov.str_descrip 'Movimiento', mc.str_descrip 'Descripcion', mon.str_simbolo 'Moneda', mc.importe_deduccion_iva 'Importe deduccion IVA' "+
+	    	String sql = "select mc.str_fecha as 'Fecha', mc.dob_debe as 'Debito', mc.dob_haber as 'Credito', mc.dob_saldo 'Saldo', mc.str_descrip 'Descripcion', mc.importe_deduccion_iva 'Importe deduccion IVA' "+
 						"from dbo.movimiento_caja mc " +
 						"join dbo.monedas mon "+ 
 							"on  mc.id_moneda = mon.id "+
@@ -131,16 +131,14 @@ public class Datos {
 	        while(rs.next()){
 	        	VOFlujoCaja voFlujoCaja = new VOFlujoCaja();        	
 	        	
-	        	DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-	        	Date date = format.parse(rs.getString("Fecha"));
-	        	        	
-	        	voFlujoCaja.setFecha(date);
+	        	DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());	        	     
+	        	DateFormat format2 = new SimpleDateFormat("dd/MM/yyyy");
+	        	
+	        	voFlujoCaja.setFecha(format2.format(format.parse(rs.getString("Fecha"))));       	
 	        	voFlujoCaja.setDebito(rs.getDouble("Debito"));
 	        	voFlujoCaja.setCredito(rs.getDouble("Credito"));
-	        	voFlujoCaja.setSaldo(rs.getDouble("Saldo"));
-	        	voFlujoCaja.setMovimiento(rs.getString("Movimiento"));
-	        	voFlujoCaja.setDescripcion(rs.getString("Descripcion"));
-	        	voFlujoCaja.setMoneda(rs.getString("Moneda"));
+	        	voFlujoCaja.setSaldo(rs.getDouble("Saldo"));	        	
+	        	voFlujoCaja.setDescripcion(rs.getString("Descripcion"));	        	
 	        	voFlujoCaja.setImporteDeduccionIVA(rs.getDouble("Importe deduccion IVA"));
 	        	arrayFlujoCaja.add(voFlujoCaja);
 	        }	        
@@ -184,7 +182,7 @@ public class Datos {
 	    ArrayList<VODeudores> arrayDeudores = new ArrayList<VODeudores>();
 	    
 	    try{
-	    	String sql =  "select cli.str_nombre as 'Nombre empresa', cli.id as 'Id cliente', cli.empresa_particular as 'Tipo', cli.str_direccion as 'Direccion', (cc.saldo * -1) as 'Saldo deuda', mon.str_simbolo as 'Moneda' "+
+	    	String sql =  "select cli.str_nombre as 'Nombre empresa', (cc.saldo * -1) as 'Saldo deuda' "+
 	    			 		"from dbo.Clientes cli "+
     			 			"join CC_Cliente cc "+
     			 				"on cli.id = cc.id_cliente "+
@@ -204,12 +202,8 @@ public class Datos {
 	        while(rs.next()){
 	        	VODeudores voDeudores = new VODeudores();        	
 	        	
-	        	voDeudores.setDireccion(rs.getString("Direccion"));
-	        	voDeudores.setIdCliente(rs.getInt("Id cliente"));
-	        	voDeudores.setMoneda(rs.getString("Moneda"));
 	        	voDeudores.setNombre(rs.getString("Nombre empresa"));
-	        	voDeudores.setSaldo(rs.getDouble("Saldo deuda"));
-	        	voDeudores.setTipo(rs.getString("Tipo"));	        	
+	        	voDeudores.setSaldo(rs.getDouble("Saldo deuda"));	        	        	
 	        	arrayDeudores.add(voDeudores);
 	        }	        
 	        
@@ -245,7 +239,7 @@ public class Datos {
 	/**
 	 * Devuelve los deudores segun una moneda 	 
 	 */
-	public ArrayList<VODesgloce> DesgloceVentas(String fecha){		
+	public ArrayList<VODesgloce> DesgloceVentasDiario(String fecha){		
 		PreparedStatement stmt = null;
 	    ResultSet rs = null;
 	    Connection conn = null;
@@ -277,7 +271,8 @@ public class Datos {
 	        	VODesgloce voDesgloce = new VODesgloce();        	
 	        	
 	        	voDesgloce.setCantidad(rs.getDouble("Cantidad"));
-	        	voDesgloce.setRubro(rs.getString("Rubro"));	        		        	
+	        	voDesgloce.setRubro(rs.getString("Rubro"));
+	        	
 	        	arrayDesgloce.add(voDesgloce);
 	        }	        
 	        

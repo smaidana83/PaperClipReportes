@@ -4,19 +4,17 @@ import java.util.Date;
 
 public class VOFlujoCaja {
 	
-	Date fecha;
+	String fecha;
 	double debito;
 	double credito;
 	double saldo;
-	String movimiento;
-	String descripcion;
-	String moneda;
+	String descripcion;	
 	double importeDeduccionIVA;
 	
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
 	public double getDebito() {
@@ -36,25 +34,13 @@ public class VOFlujoCaja {
 	}
 	public void setSaldo(double saldo) {
 		this.saldo = saldo;
-	}
-	public String getMovimiento() {
-		return movimiento;
-	}
-	public void setMovimiento(String movimiento) {
-		this.movimiento = movimiento;
-	}
+	}	
 	public String getDescripcion() {
 		return descripcion;
 	}
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-	public String getMoneda() {
-		return moneda;
-	}
-	public void setMoneda(String moneda) {
-		this.moneda = moneda;
-	}
+	}	
 	public double getImporteDeduccionIVA() {
 		return importeDeduccionIVA;
 	}

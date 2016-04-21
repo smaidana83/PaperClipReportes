@@ -135,8 +135,10 @@ public class FlujoDeCaja extends CustomComponent implements View {
 			ArrayList<VOFlujoCaja> array =  logica.FlujoDeCaja(date.getValue(), (Integer)cboMoneda.getValue());
 			if(array != null && !array.isEmpty()){
 				ds = new BeanItemContainer<VOFlujoCaja>(VOFlujoCaja.class, array);
+				
 				grdFlujo.removeAllColumns();
 				grdFlujo.setContainerDataSource(ds);
+				grdFlujo.setColumnOrder("fecha", "descripcion","credito","debito","importeDeduccionIVA","saldo");
 				mainLayout.addComponent(grdFlujo);	
 				lblMessage.setValue("");
 			}else{
