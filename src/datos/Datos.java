@@ -26,10 +26,10 @@ public class Datos {
 	 * Establece la conexion con el driver jdbc
 	 */
 	private Connection getConnection() throws ClassNotFoundException, SQLException{
-		String username = "ro";
+		String username = "readOnly";
 		String password = "ro";	
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-		String url = "jdbc:sqlserver://localhost\\MSSQLEXPRESS:51590;databaseName=GestionIntegral20;";		
+		String url = "jdbc:sqlserver://localhost\\MSSQLEXPRESS:49221;databaseName=GestionIntegral20;";		
 		Connection conn = DriverManager.getConnection(url,username,password);
 		return conn;
 	}
