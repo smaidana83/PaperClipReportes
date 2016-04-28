@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import valueObject.VOMoneda;
+import valueObject.VOTotalEnCajaDesgloce;
 import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
@@ -100,6 +101,67 @@ public class Datos {
 	         }
 	      }
 	    return total;
+	}
+	
+	/**
+	 * Devuelve el desgloce del calculo de plata en caja
+	 */
+	public ArrayList<VOTotalEnCajaDesgloce> TotalEnCajaDesgloce (String fecha){		
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    PreparedStatement preparedStatement = null;
+	    ArrayList<VOTotalEnCajaDesgloce> array = new ArrayList<VOTotalEnCajaDesgloce>();
+	    	    
+	    try{		
+	    	String sql = "SELECT mov.id_tipo_movimiento, tipo.str_descrip as 'Tipo Movimiento', sum(mov.dob_haber) as 'Credito', sum(mov.dob_debe) as 'Debito' "
+	    			+ "FROM (Movimiento_Caja mov "
+	    			+ "join Tipo_Movimiento_Caja tipo "
+	    			+ "on  tipo.id = mov.id_tipo_movimiento) "
+	    			+ "where mov.str_fecha = ? and mov.id_tipo_movimiento != 9 and mov.id_tipo_movimiento !=10 "
+	    			+ "group by mov.id_tipo_movimiento, tipo.str_descrip "
+	    			+ "order by id_tipo_movimiento desc";
+		
+	    	conn = this.getConnection();	
+	    	preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, fecha);			
+			rs = preparedStatement.executeQuery();        
+	        
+	        while(rs.next()){
+	        	VOTotalEnCajaDesgloce aux = new VOTotalEnCajaDesgloce();
+	        	aux.setDescripcion(rs.getString("Tipo Movimiento"));
+	        	aux.setCredito(rs.getDouble("Credito"));
+	        	aux.setDebito(rs.getDouble("Debito"));
+	        	
+	        	array.add(aux);	        	
+	        }
+	        
+		} catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (preparedStatement != null){
+	        	 try { 
+	        		 preparedStatement.close(); 
+        		 } catch(Exception e) {
+        			 
+        		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return array;
 	}
 	
 	/***

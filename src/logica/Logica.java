@@ -9,6 +9,7 @@ import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
 import valueObject.VOMoneda;
+import valueObject.VOTotalEnCajaDesgloce;
 
 public class Logica {
 	private Datos datos = new Datos();
@@ -35,6 +36,10 @@ public class Logica {
 	
 	public ArrayList<VODesgloce> DesgloceVentasMensual(Date fecha){
 		return null;
+	}
+	
+	public ArrayList<VOTotalEnCajaDesgloce> TotalEnCajaDesgloce(Date fecha){
+		return datos.TotalEnCajaDesgloce(Utils.convertDateToString(fecha));
 	}
 
 }
