@@ -69,6 +69,8 @@ public class Deudores extends CustomComponent implements View {
 		
 		cboMoneda = new ComboBox();
 		cboMoneda.setCaption("Moneda");	
+		cboMoneda.setNullSelectionAllowed(false);
+		cboMoneda.setImmediate(true);
 		mainLayout.addComponent(cboMoneda);
 		
 		lblMessage = new Label("");
@@ -84,12 +86,13 @@ public class Deudores extends CustomComponent implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub
-		cargarComboMonedas();
-		
+			
 		if(grdDeudores != null){
 			mainLayout.removeComponent(grdDeudores);		
 		}
 		lblMessage.setValue("");
+		
+		cargarComboMonedas();		
 	}
 	
 	private void getDeudores(){
@@ -118,7 +121,7 @@ public class Deudores extends CustomComponent implements View {
 			cboMoneda.addItem(moneda.getId());
 			cboMoneda.setItemCaption(moneda.getId(), moneda.getSimbolo());			
 		}	
-		
+		cboMoneda.setValue(cboMoneda.getItemIds().iterator().next());
 	}
 
 }

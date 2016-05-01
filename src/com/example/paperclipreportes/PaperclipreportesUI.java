@@ -21,6 +21,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -40,6 +41,7 @@ public class PaperclipreportesUI extends UI {
 	//private GridLayout mainLayout;
 	private VerticalLayout mainLayout;
 	private VerticalLayout contentLayout;  
+	private HorizontalLayout headerLayout;
 	private Navigator contentNavigator;	
 	protected static final String TOTALENCAJA = "";
 //	protected static final String TOTALENCAJA = "totalEnCaja";
@@ -62,6 +64,7 @@ public class PaperclipreportesUI extends UI {
 	protected void init(VaadinRequest request) {
 		//mainLayout = new GridLayout(3,3);
 		mainLayout = new VerticalLayout();
+		headerLayout = new HorizontalLayout();
 		contentLayout = new VerticalLayout();
 		
 		VaadinSession.getCurrent().setConverterFactory(new MyConverterFactory());
@@ -72,31 +75,22 @@ public class PaperclipreportesUI extends UI {
 		mainLayout.setWidth("100%");		
 		Responsive.makeResponsive(this);
 		
-				
+		//Header
+		//headerLayout.setSizeUndefined();
+		headerLayout.setWidth("100%");
+		headerLayout.setSpacing(true);
+		headerLayout.setStyleName("headerStyle");		
+		//headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+		mainLayout.addComponent(headerLayout);
+		
 		
 		//Ruta base de la aplicacion
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-				
-		//Logo
-		FileResource paperClipLogoResource = new FileResource(new File(basepath +"/WEB-INF/images/logo.png"));		
-		Image paperClipLogo = new Image(null, paperClipLogoResource);
-		paperClipLogo.setHeight("63px");
-		paperClipLogo.setWidth("184.2px");			
-		mainLayout.addComponent(paperClipLogo);
-		
-		paperClipLogo.addClickListener(new ClickListener() {
-			
-			@Override
-			public void click(ClickEvent event) {
-				// TODO Auto-generated method stub
-				contentNavigator.navigateTo("");
-			}
-		});
-		
+					
 		//MenuBar	
 		MenuBar menuPrincipal = new MenuBar();
 		//mainLayout.addComponent(menuPrincipal,0,1);		
-		mainLayout.addComponent(menuPrincipal);	
+		headerLayout.addComponent(menuPrincipal);			
 		
 		MenuBar.Command menuCommand = new MenuBar.Command() {
 			public void menuSelected(MenuItem selectedItem) {
@@ -130,9 +124,24 @@ public class PaperclipreportesUI extends UI {
 		MenuItem deudores = reportes.addItem("Deudores", menuCommand);
 		MenuItem desgloceDeVentas = reportes.addItem("Desgloce de ventas", menuCommand);
 		
+		//Logo
+		FileResource paperClipLogoResource = new FileResource(new File(basepath +"/WEB-INF/images/logo.png"));		
+		Image paperClipLogo = new Image(null, paperClipLogoResource);
+		//paperClipLogo.setHeight("63px");
+		//paperClipLogo.setWidth("184.2px");		
+		headerLayout.addComponent(paperClipLogo);
+		headerLayout.setExpandRatio(paperClipLogo, 1);
+	
 		
-				
-				
+		paperClipLogo.addClickListener(new ClickListener() {
+			
+			@Override
+			public void click(ClickEvent event) {
+				// TODO Auto-generated method stub
+				contentNavigator.navigateTo("");
+			}
+		});
+						
 		
 
 		//Navigator

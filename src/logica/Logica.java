@@ -1,5 +1,6 @@
 package logica;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,7 +12,9 @@ import valueObject.VOFlujoCaja;
 import valueObject.VOMoneda;
 import valueObject.VOTotalEnCajaDesgloce;
 
-public class Logica {
+public class Logica implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	private Datos datos = new Datos();
 	
 	public double TotalEnCaja(Date fecha){

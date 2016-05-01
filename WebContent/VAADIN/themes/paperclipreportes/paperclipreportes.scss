@@ -41,6 +41,13 @@ $v-background-color: #ffffff;
   color:red;
   }
   
+.v-horizontallayout-headerStyle{
+	//background: url("fondoHeader.PNG");
+   	//background-repeat: no-repeat;
+    //background-position: left bottom; 
+    background-color:#FFBF00;
+  }
+  
 .v-menubar-menuitem-menuPrincipal .v-menubar-submenu-indicator + .v-menubar-menuitem-caption:after {
       content: none;
   }
