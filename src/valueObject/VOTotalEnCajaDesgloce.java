@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class VOTotalEnCajaDesgloce implements Serializable {
 	private static final long serialVersionUID = 1L;
 	String descripcion;
+	String tipo;
 	double credito;
 	double debito;
 	
@@ -25,6 +26,12 @@ public class VOTotalEnCajaDesgloce implements Serializable {
 	}
 	public void setDebito(double debito) {
 		this.debito = debito;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 }

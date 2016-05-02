@@ -1,5 +1,6 @@
 package datos;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,8 +17,10 @@ import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
 
-public class Datos {
+public class Datos implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	public Datos(){
 		
 	}
@@ -113,12 +116,12 @@ public class Datos {
 	    ArrayList<VOTotalEnCajaDesgloce> array = new ArrayList<VOTotalEnCajaDesgloce>();
 	    	    
 	    try{		
-	    	String sql = "SELECT mov.id_tipo_movimiento, tipo.str_descrip as 'Tipo Movimiento', sum(mov.dob_haber) as 'Credito', sum(mov.dob_debe) as 'Debito' "
+	    	String sql = "SELECT mov.id_tipo_movimiento, tipo.str_descrip as 'Descripcion Movimiento', tipo.str_tipo_cr as 'Tipo Movimiento', sum(mov.dob_haber) as 'Credito', sum(mov.dob_debe) as 'Debito' "
 	    			+ "FROM (Movimiento_Caja mov "
 	    			+ "join Tipo_Movimiento_Caja tipo "
 	    			+ "on  tipo.id = mov.id_tipo_movimiento) "
 	    			+ "where mov.str_fecha = ? and mov.id_tipo_movimiento != 9 and mov.id_tipo_movimiento !=10 "
-	    			+ "group by mov.id_tipo_movimiento, tipo.str_descrip "
+	    			+ "group by mov.id_tipo_movimiento, tipo.str_descrip, tipo.str_tipo_cr "
 	    			+ "order by id_tipo_movimiento asc";
 		
 	    	conn = this.getConnection();	
@@ -128,9 +131,10 @@ public class Datos {
 	        
 	        while(rs.next()){
 	        	VOTotalEnCajaDesgloce aux = new VOTotalEnCajaDesgloce();
-	        	aux.setDescripcion(rs.getString("Tipo Movimiento"));
+	        	aux.setDescripcion(rs.getString("Descripcion Movimiento"));
 	        	aux.setCredito(rs.getDouble("Credito"));
 	        	aux.setDebito(rs.getDouble("Debito"));
+	        	aux.setTipo(rs.getString("Tipo Movimiento"));
 	        	
 	        	array.add(aux);	        	
 	        }
