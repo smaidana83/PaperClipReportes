@@ -19,8 +19,6 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.MenuBar;
@@ -69,7 +67,7 @@ public class PaperclipreportesUI extends UI {
 		
 		VaadinSession.getCurrent().setConverterFactory(new MyConverterFactory());
 		setLocale(new Locale("es", "UY"));
-		mainLayout.setMargin(true);
+		mainLayout.setMargin(false);
 		mainLayout.setSpacing(true);
 		setContent(mainLayout);				
 		mainLayout.setWidth("100%");		
@@ -78,6 +76,7 @@ public class PaperclipreportesUI extends UI {
 		//Header
 		//headerLayout.setSizeUndefined();
 		headerLayout.setWidth("100%");
+		headerLayout.setMargin(true);
 		headerLayout.setSpacing(true);
 		headerLayout.setStyleName("headerStyle");		
 		//headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
@@ -89,6 +88,7 @@ public class PaperclipreportesUI extends UI {
 					
 		//MenuBar	
 		MenuBar menuPrincipal = new MenuBar();
+		menuPrincipal.setStyleName(ValoTheme.MENUBAR_BORDERLESS);
 		//mainLayout.addComponent(menuPrincipal,0,1);		
 		headerLayout.addComponent(menuPrincipal);			
 		
@@ -118,7 +118,7 @@ public class PaperclipreportesUI extends UI {
 				
 		MenuItem reportes = menuPrincipal.addItem("", new ThemeResource("icons/menu.png"), null);
 		reportes.setStyleName("menuPrincipal");
-		
+				
 		MenuItem totalEnCaja = reportes.addItem("Total en caja", menuCommand);
 		MenuItem flujoDeCaja = reportes.addItem("Flujo de caja", menuCommand);
 		MenuItem deudores = reportes.addItem("Deudores", menuCommand);
@@ -146,7 +146,7 @@ public class PaperclipreportesUI extends UI {
 
 		//Navigator
 		
-		//contentLayout.setMargin(true);
+		contentLayout.setMargin(true);
 		//contentLayout.setSizeFull();
 		ComponentContainerViewDisplay viewDisplay = new ComponentContainerViewDisplay(contentLayout);
 		contentNavigator = new Navigator(this, viewDisplay);

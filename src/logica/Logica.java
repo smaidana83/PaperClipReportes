@@ -17,9 +17,9 @@ public class Logica implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Datos datos = new Datos();
 	
-	public double TotalEnCaja(Date fecha){
-		return datos.TotalEnCaja(Utils.convertDateToString(fecha));
-	}
+//	public double TotalEnCaja(Date fecha){
+//		return datos.TotalEnCaja(Utils.convertDateToString(fecha));		
+//	}
 	
 	public ArrayList<VOFlujoCaja> FlujoDeCaja(Date fecha, int idMoneda){
 		return datos.FlujoDeCaja(Utils.convertDateToString(fecha),idMoneda);		

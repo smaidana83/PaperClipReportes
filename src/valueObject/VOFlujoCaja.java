@@ -1,15 +1,16 @@
 package valueObject;
 
-import java.util.Date;
+import java.io.Serializable;
 
-public class VOFlujoCaja {
+public class VOFlujoCaja implements Serializable {
 	
-	String fecha;
-	double debito;
-	double credito;
-	double saldo;
-	String descripcion;	
-	double importeDeduccionIVA;
+	private static final long serialVersionUID = 1L;
+	private String fecha;
+	private double debito;
+	private double credito;
+	private double saldo;
+	private String descripcion;	
+	private double importeDeduccionIVA;
 	
 	public String getFecha() {
 		return fecha;

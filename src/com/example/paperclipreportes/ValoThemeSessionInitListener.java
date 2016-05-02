@@ -14,13 +14,17 @@ import org.jsoup.nodes.Element;
 
 public class ValoThemeSessionInitListener implements SessionInitListener {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
     public void sessionInit(final SessionInitEvent event)
             throws ServiceException {
         event.getService().setSystemMessagesProvider(
                 new SystemMessagesProvider() {
 
-                    @Override
+					private static final long serialVersionUID = 1L;
+
+					@Override
                     public SystemMessages getSystemMessages(
                             final SystemMessagesInfo systemMessagesInfo) {
                         CustomizedSystemMessages csm = new CustomizedSystemMessages();
@@ -30,7 +34,12 @@ public class ValoThemeSessionInitListener implements SessionInitListener {
                 });
         event.getSession().addBootstrapListener(new BootstrapListener() {
 
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public void modifyBootstrapPage(final BootstrapPageResponse response) {
                 final Element head = response.getDocument().head();
                 head.appendElement("meta").attr("name", "viewport")

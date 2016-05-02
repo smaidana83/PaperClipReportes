@@ -4,6 +4,9 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.DefaultConverterFactory;
 
 public class MyConverterFactory extends DefaultConverterFactory {
+	
+	private static final long serialVersionUID = 1L;
+
 	@Override
     protected <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> findConverter(
             Class<PRESENTATION> presentationType, Class<MODEL> modelType) {

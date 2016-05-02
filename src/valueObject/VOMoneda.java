@@ -1,6 +1,10 @@
 package valueObject;
 
-public class VOMoneda {
+import java.io.Serializable;
+
+public class VOMoneda implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String simbolo;
 	private String descripcion;

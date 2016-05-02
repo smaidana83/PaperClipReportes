@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import valueObject.VOMoneda;
@@ -38,70 +37,71 @@ public class Datos {
 	/**
 	 * Devuelve el total de la caja dada una fecha	
 	 */
-	public double TotalEnCaja (String fecha){		
-	    ResultSet rs = null;
-	    Connection conn = null;
-	    PreparedStatement preparedStatement = null;
-	    
-	    double total=0.00;
-	    try{		
-	    	String sql = "select( " +
-						/*obtengo el ultimo movimiento*/
-						"select mc1.dob_saldo " +
-							"from Movimiento_Caja mc1 "+
-							"where mc1.id in( "+
-								"select max(mc2.id) "+
-									"from dbo.Movimiento_Caja mc2 "+
-									"where mc2.str_fecha like ? "+
-										"and mc2.id_tipo_movimiento != 10 "+
-										"and mc2.id_tipo_movimiento != 9 " +
-							") " +
-						") - ( "+
-						/*obtengo la apertura de caja*/
-						"select mc3.dob_saldo "+
-							"FROM dbo.Movimiento_Caja mc3 " +
-							"where mc3.str_fecha like ? "+
-								"and mc3.id_tipo_movimiento = 13 "+
-						") as 'Total en caja' ";
-		
-	    	conn = this.getConnection();	
-	    	preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, fecha);
-			preparedStatement.setString(2, fecha);
-			rs = preparedStatement.executeQuery();        
-	        
-	        if(rs.next()){
-	        	total = rs.getDouble(1);
-	        }
-	        
-		} catch (Exception e) {
-	         e.printStackTrace();
-	      }
-	      finally {
-	         if (rs != null) {
-	        	 try { 
-	        		 rs.close(); 
-	        	 } catch(Exception e) {
-	        		 
-	        	 }
-	         }
-	         if (preparedStatement != null){
-	        	 try { 
-	        		 preparedStatement.close(); 
-        		 } catch(Exception e) {
-        			 
-        		 }
-	         }
-	         if (conn != null) {
-	        	 try { 
-	        		 conn.close(); 
-	        	 } catch(Exception e) {
-	        		 
-	        	 }
-	         }
-	      }
-	    return total;
-	}
+//	public double TotalEnCaja (String fecha){		
+//	    ResultSet rs = null;
+//	    Connection conn = null;
+//	    PreparedStatement preparedStatement = null;
+//	    
+//	    double total=0.00;
+//	    try{		
+//	    	String sql = "select( " +
+//						/*obtengo el ultimo movimiento*/
+//						"select mc1.dob_saldo " +
+//							"from Movimiento_Caja mc1 "+
+//							"where mc1.id in( "+
+//								"select max(mc2.id) "+
+//									"from dbo.Movimiento_Caja mc2 "+
+//									"where mc2.str_fecha like ? "+
+//										"and mc2.id_tipo_movimiento != 10 "+
+//										"and mc2.id_tipo_movimiento != 9 " +
+//							") " +
+//						") - ( "+
+//						/*obtengo la apertura de caja*/
+//						"select mc3.dob_saldo "+
+//							"FROM dbo.Movimiento_Caja mc3 " +
+//							"where mc3.str_fecha like ? "+
+//								"and mc3.id_tipo_movimiento = 13 "+
+//						") as 'Total en caja' ";
+//		
+//	    	conn = this.getConnection();	
+//	    	preparedStatement = conn.prepareStatement(sql);
+//			preparedStatement.setString(1, fecha);
+//			preparedStatement.setString(2, fecha);
+//			rs = preparedStatement.executeQuery();        
+//	        
+//	        if(rs.next()){
+//	        	total = rs.getDouble(1);
+//	        }
+//	        
+//		} catch (Exception e) {
+//	         e.printStackTrace();
+//	      }
+//	      finally {
+//	         if (rs != null) {
+//	        	 try { 
+//	        		 rs.close(); 
+//	        	 } catch(Exception e) {
+//	        		 
+//	        	 }
+//	         }
+//	         if (preparedStatement != null){
+//	        	 try { 
+//	        		 preparedStatement.close(); 
+//        		 } catch(Exception e) {
+//        			 
+//        		 }
+//	         }
+//	         if (conn != null) {
+//	        	 try { 
+//	        		 conn.close(); 
+//	        	 } catch(Exception e) {
+//	        		 
+//	        	 }
+//	         }
+//	      }
+//	    return total;
+//	}
+	
 	
 	/**
 	 * Devuelve el desgloce del calculo de plata en caja
@@ -119,7 +119,7 @@ public class Datos {
 	    			+ "on  tipo.id = mov.id_tipo_movimiento) "
 	    			+ "where mov.str_fecha = ? and mov.id_tipo_movimiento != 9 and mov.id_tipo_movimiento !=10 "
 	    			+ "group by mov.id_tipo_movimiento, tipo.str_descrip "
-	    			+ "order by id_tipo_movimiento desc";
+	    			+ "order by id_tipo_movimiento asc";
 		
 	    	conn = this.getConnection();	
 	    	preparedStatement = conn.prepareStatement(sql);

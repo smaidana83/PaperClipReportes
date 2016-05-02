@@ -1,6 +1,10 @@
 package valueObject;
 
-public class VODesgloce {
+import java.io.Serializable;
+
+public class VODesgloce implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private double cantidad;
 	private String rubro;
 	

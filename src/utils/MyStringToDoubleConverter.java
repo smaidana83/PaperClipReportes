@@ -4,11 +4,12 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import com.vaadin.data.util.converter.StringToDoubleConverter;
-import com.vaadin.server.VaadinSession;
 
 public class MyStringToDoubleConverter  extends StringToDoubleConverter{
-	
-	 @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
 	    protected NumberFormat getFormat(Locale locale) {		
 	        NumberFormat format = super.getFormat(locale);
 	        format.setGroupingUsed(true);

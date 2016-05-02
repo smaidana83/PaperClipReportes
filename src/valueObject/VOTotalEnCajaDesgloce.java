@@ -1,6 +1,9 @@
 package valueObject;
 
-public class VOTotalEnCajaDesgloce {
+import java.io.Serializable;
+
+public class VOTotalEnCajaDesgloce implements Serializable {
+	private static final long serialVersionUID = 1L;
 	String descripcion;
 	double credito;
 	double debito;

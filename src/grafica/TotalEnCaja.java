@@ -10,7 +10,6 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Calendar;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
@@ -36,6 +35,9 @@ public class TotalEnCaja extends CustomComponent implements View {
 	private Label lblMessage;
 	private PopupDateField date;	
 	private TextField txtTotal;
+	private TextField txtEfectivoCaja;
+	private TextField txtVentaDiaria;
+	private TextField txtVentaClienteCredito;
 	private Grid grdDesgloce;
 	private BeanItemContainer<VOTotalEnCajaDesgloce> ds;
 	private Logica logica;
@@ -58,9 +60,6 @@ public class TotalEnCaja extends CustomComponent implements View {
 		
 		date.addValueChangeListener(new ValueChangeListener() {
 			
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -70,6 +69,9 @@ public class TotalEnCaja extends CustomComponent implements View {
 				if(grdDesgloce != null){
 					mainLayout.removeComponent(grdDesgloce);
 					txtTotal.setConvertedValue(0.00);
+					txtEfectivoCaja.setConvertedValue(0.00);
+					txtVentaClienteCredito.setConvertedValue(0.00);
+					txtVentaDiaria.setConvertedValue(0.00);
 				}
 				
 				if(date.isValid()){
@@ -81,7 +83,22 @@ public class TotalEnCaja extends CustomComponent implements View {
 						grdDesgloce.setColumnOrder("descripcion", "credito","debito");
 						mainLayout.addComponent(grdDesgloce);	
 						
-						txtTotal.setConvertedValue(logica.TotalEnCaja(date.getValue()));
+						//txtTotal.setConvertedValue(logica.TotalEnCaja(date.getValue()));
+						
+						for (VOTotalEnCajaDesgloce voTotalEnCajaDesgloce : array) {
+							//Total
+							txtTotal.setConvertedValue(((double)txtTotal.getConvertedValue()) + voTotalEnCajaDesgloce.getCredito() + voTotalEnCajaDesgloce.getDebito());
+							
+							//Efectivo en caja
+							
+							
+							//Venta diaria
+							
+							
+							//Venta cliente credito
+							
+						}
+						
 						
 						lblMessage.setValue("");
 					}else{
@@ -123,6 +140,21 @@ public class TotalEnCaja extends CustomComponent implements View {
 		txtTotal.setConverter(Double.class);
 		mainLayout.addComponent(txtTotal);
 		
+		txtEfectivoCaja = new TextField();	
+		txtEfectivoCaja.setCaption("Efectivo en Caja");
+		txtEfectivoCaja.setConverter(Double.class);
+		mainLayout.addComponent(txtEfectivoCaja);
+		
+		txtVentaDiaria = new TextField();	
+		txtVentaDiaria.setCaption("Venta diaria");
+		txtVentaDiaria.setConverter(Double.class);
+		mainLayout.addComponent(txtVentaDiaria);
+		
+		txtVentaClienteCredito = new TextField();	
+		txtVentaClienteCredito.setCaption("Venta cliente credito");
+		txtVentaClienteCredito.setConverter(Double.class);
+		mainLayout.addComponent(txtVentaClienteCredito);
+				
 		grdDesgloce = new Grid();		
 		grdDesgloce.setSizeFull();
 				
