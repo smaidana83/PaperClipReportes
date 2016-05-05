@@ -76,6 +76,7 @@ public class PaperclipreportesUI extends UI {
 		//Header
 		//headerLayout.setSizeUndefined();
 		headerLayout.setWidth("100%");
+		headerLayout.setHeight("90px");
 		headerLayout.setMargin(true);
 		headerLayout.setSpacing(true);
 		headerLayout.setStyleName("headerStyle");		
