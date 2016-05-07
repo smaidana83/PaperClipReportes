@@ -36,7 +36,6 @@ import utils.MyConverterFactory;
 @SuppressWarnings("serial")
 @Theme("paperclipreportes")
 public class PaperclipreportesUI extends UI {
-	//private GridLayout mainLayout;
 	private VerticalLayout mainLayout;
 	private VerticalLayout contentLayout;  
 	private HorizontalLayout headerLayout;
