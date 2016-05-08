@@ -171,8 +171,7 @@ public class DesgloceDeVentasDiario extends CustomComponent implements View {
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub
 		lblMessage.setValue("");
-		date.setValue(new Date());		
-			
+					
 		if(tblDesgloce != null){
 			mainLayout.removeComponent(tblDesgloce);		
 		}	
@@ -180,6 +179,8 @@ public class DesgloceDeVentasDiario extends CustomComponent implements View {
 		if(pieChart != null){
 			mainLayout.removeComponent(pieChart);
 		}
+		
+		date.setValue(new Date());	
 	}
 	
 	private void getDesgloceDiario(){

@@ -8,12 +8,16 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import logica.Logica;
 import valueObject.VODeudores;
@@ -27,10 +31,11 @@ public class Deudores extends CustomComponent implements View {
 	private VerticalLayout mainLayout;
 	private Label lblTitle;
 	private ComboBox cboMoneda;
-	private Grid grdDeudores;
+	private Table tblDeudores;
 	private BeanItemContainer<VODeudores> ds;	
 	private Logica logica;
 	private Label lblMessage;
+	private Button btnExcelExport;
 
 	/**
 	 * The constructor should first build the main layout, set the
@@ -46,9 +51,6 @@ public class Deudores extends CustomComponent implements View {
 
 		cboMoneda.addValueChangeListener(new ValueChangeListener() {
 			
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -84,8 +86,12 @@ public class Deudores extends CustomComponent implements View {
 		lblMessage.setSizeUndefined();
 		mainLayout.addComponent(lblMessage);
 		
-		grdDeudores = new Grid();		
-		grdDeudores.setSizeFull();
+		btnExcelExport = new Button();
+		btnExcelExport.setIcon(new ThemeResource("icons/download.png"));
+		btnExcelExport.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+		
+		tblDeudores = new Table();		
+		tblDeudores.setSizeFull();
 		
 	}
 
@@ -93,26 +99,39 @@ public class Deudores extends CustomComponent implements View {
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub
 			
-		if(grdDeudores != null){
-			mainLayout.removeComponent(grdDeudores);		
+		if(tblDeudores != null){
+			mainLayout.removeComponent(tblDeudores);		
 		}
+		
+		if(btnExcelExport != null){
+			mainLayout.removeComponent(btnExcelExport);
+		}
+		
 		lblMessage.setValue("");
 		
 		cargarComboMonedas();		
 	}
 	
 	private void getDeudores(){
-		if(grdDeudores != null){
-			mainLayout.removeComponent(grdDeudores);			
+		if(tblDeudores != null){
+			mainLayout.removeComponent(tblDeudores);			
+		}
+		
+		if(btnExcelExport != null){
+			mainLayout.removeComponent(btnExcelExport);
 		}
 		
 		if(cboMoneda.getValue() != null){			
 			ArrayList<VODeudores> array =  logica.Deudores((Integer)cboMoneda.getValue());
 			if(array != null && !array.isEmpty()){
 				ds = new BeanItemContainer<VODeudores>(VODeudores.class, array);
-				grdDeudores.removeAllColumns();
-				grdDeudores.setContainerDataSource(ds);
-				mainLayout.addComponent(grdDeudores);	
+				tblDeudores.removeAllItems();
+				tblDeudores.setContainerDataSource(ds);
+				tblDeudores.setPageLength(ds.size());
+				
+				mainLayout.addComponent(btnExcelExport);
+				mainLayout.addComponent(tblDeudores);	
+				
 				lblMessage.setValue("");				
 			}else{
 				lblMessage.setValue("No hay registros para mostrar");
