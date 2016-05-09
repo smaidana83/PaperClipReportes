@@ -99,7 +99,7 @@ public class DesgloceDeVentasDiario extends CustomComponent implements View {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Utils.exportTableAsExcel(tblDesgloce,"Desgloce de Ventas",date.getValue().toString());
+				Utils.exportTableAsExcel(tblDesgloce,"Desgloce de Ventas Diario",date.getValue().toString());
 			}
 		});	
 
@@ -125,7 +125,7 @@ public class DesgloceDeVentasDiario extends CustomComponent implements View {
 		mainLayout.setWidth("100%");
 		mainLayout.setDefaultComponentAlignment(Alignment.TOP_CENTER);
 		
-		lblTitle = new Label("Desgloce de ventas");
+		lblTitle = new Label("Desgloce de ventas diario");
 		lblTitle.setSizeUndefined();
 		lblTitle.setStyleName("h2");
 		mainLayout.addComponent(lblTitle);

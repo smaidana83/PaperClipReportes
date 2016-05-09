@@ -10,6 +10,7 @@ import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
 import valueObject.VOMoneda;
+import valueObject.VOPresupuesto;
 import valueObject.VOTotalEnCajaDesgloce;
 
 public class Logica implements Serializable{
@@ -37,12 +38,20 @@ public class Logica implements Serializable{
 		return datos.ObtenerMonedas();
 	}
 	
-	public ArrayList<VODesgloce> DesgloceVentasMensual(Date fecha){
-		return null;
+	public ArrayList<VODesgloce> DesgloceVentasMensual(Date fechaInicial, Date fechaFinal){
+		if(fechaFinal.after(fechaInicial)){
+			return datos.DesgloceVentasMensual(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		}else{
+			return null;
+		}
 	}
 	
 	public ArrayList<VOTotalEnCajaDesgloce> TotalEnCajaDesgloce(Date fecha){
 		return datos.TotalEnCajaDesgloce(Utils.convertDateToString(fecha));
+	}
+	
+	public ArrayList<VOPresupuesto> Presupuesto(){
+		return datos.Presupuesto();
 	}
 
 }

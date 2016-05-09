@@ -28,8 +28,10 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import grafica.DesgloceDeVentasDiario;
+import grafica.DesgloceDeVentasMensual;
 import grafica.Deudores;
 import grafica.FlujoDeCaja;
+import grafica.Presupuesto;
 import grafica.TotalEnCaja;
 import utils.MyConverterFactory;
 
@@ -44,7 +46,9 @@ public class PaperclipreportesUI extends UI {
 //	protected static final String TOTALENCAJA = "totalEnCaja";
 	protected static final String FLUJODECAJA = "flujoDeCaja";	
 	protected static final String DEUDORES = "deudores";
-	protected static final String DESGLOCEDEVENTAS = "desgloceDeVentas";
+	protected static final String DESGLOCEDEVENTASDIARIO = "desgloceDeVentasDiario";
+	protected static final String DESGLOCEDEVENTASMENSUAL = "desgloceDeVentasMensual";
+	protected static final String PRESUPUESTO = "presupuesto";
 	
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -94,35 +98,54 @@ public class PaperclipreportesUI extends UI {
 		
 		MenuBar.Command menuCommand = new MenuBar.Command() {
 			public void menuSelected(MenuItem selectedItem) {
-			switch(selectedItem.getText()){
-			case "Total en caja":
-				contentNavigator.navigateTo(TOTALENCAJA);
-				break;
-			case "Flujo de caja":
-				contentNavigator.navigateTo(FLUJODECAJA);
-				break;
-			case "Deudores":
-				contentNavigator.navigateTo(DEUDORES);
-				break;
-			case "Desgloce de ventas":
-				contentNavigator.navigateTo(DESGLOCEDEVENTAS);
-				break;
-			default:
-				System.out.println("Selecciono uno no valido");
-				break;
-				
+				switch(selectedItem.getText()){
+				case "Total en caja":
+					contentNavigator.navigateTo(TOTALENCAJA);
+					break;
+				case "Flujo de caja":
+					contentNavigator.navigateTo(FLUJODECAJA);
+					break;
+				case "Deudores":
+					contentNavigator.navigateTo(DEUDORES);
+					break;
+				case "Diario":
+					contentNavigator.navigateTo(DESGLOCEDEVENTASDIARIO);
+					break;
+				case "Mensual":
+					contentNavigator.navigateTo(DESGLOCEDEVENTASMENSUAL);
+					break;
+				case "Presupuesto":
+					contentNavigator.navigateTo(PRESUPUESTO);
+					break;
+				default:
+					System.out.println("Selecciono uno no valido");
+					break;
+					
+				}
 			}
-			}
-			};
+		};
 		
 				
 		MenuItem reportes = menuPrincipal.addItem("", new ThemeResource("icons/menu.png"), null);
 		reportes.setStyleName("menuPrincipal");
 				
-		MenuItem totalEnCaja = reportes.addItem("Total en caja", menuCommand);
-		MenuItem flujoDeCaja = reportes.addItem("Flujo de caja", menuCommand);
-		MenuItem deudores = reportes.addItem("Deudores", menuCommand);
-		MenuItem desgloceDeVentas = reportes.addItem("Desgloce de ventas", menuCommand);
+//		MenuItem totalEnCaja = reportes.addItem("Total en caja", menuCommand);
+//		MenuItem flujoDeCaja = reportes.addItem("Flujo de caja", menuCommand);
+//		MenuItem deudores = reportes.addItem("Deudores", menuCommand);		
+//		MenuItem desgloce = reportes.addItem("Desgloce de ventas", null);
+//		MenuItem presupuesto = reportes.addItem("Presupuesto", menuCommand);		
+//		
+//		MenuItem desgloceDeVentasDiario = desgloce.addItem("Diario", menuCommand);
+//		MenuItem desgloceDeVentasMensual = desgloce.addItem("Mensual", menuCommand);
+		
+		reportes.addItem("Total en caja", menuCommand);
+		reportes.addItem("Flujo de caja", menuCommand);
+		reportes.addItem("Deudores", menuCommand);		
+		MenuItem desgloce = reportes.addItem("Desgloce de ventas", null);
+		reportes.addItem("Presupuesto", menuCommand);		
+	
+		desgloce.addItem("Diario", menuCommand);
+		desgloce.addItem("Mensual", menuCommand);
 		
 		//Logo
 		FileResource paperClipLogoResource = new FileResource(new File(basepath +"/WEB-INF/images/logo.png"));		
@@ -156,10 +179,11 @@ public class PaperclipreportesUI extends UI {
 		
 		//Carga de las paginas		
 		contentNavigator.addView(TOTALENCAJA, new TotalEnCaja());
-		contentNavigator.addView(FLUJODECAJA, new FlujoDeCaja());
-		
+		contentNavigator.addView(FLUJODECAJA, new FlujoDeCaja());		
 		contentNavigator.addView(DEUDORES, new Deudores());
-		contentNavigator.addView(DESGLOCEDEVENTAS, new DesgloceDeVentasDiario());		
+		contentNavigator.addView(DESGLOCEDEVENTASDIARIO, new DesgloceDeVentasDiario());	
+		contentNavigator.addView(DESGLOCEDEVENTASMENSUAL, new DesgloceDeVentasMensual());
+		contentNavigator.addView(PRESUPUESTO, new Presupuesto());
 	}
 
 }

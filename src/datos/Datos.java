@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import valueObject.VOMoneda;
+import valueObject.VOPresupuesto;
 import valueObject.VOTotalEnCajaDesgloce;
 import valueObject.VODesgloce;
 import valueObject.VODeudores;
@@ -36,75 +37,7 @@ public class Datos implements Serializable{
 		Connection conn = DriverManager.getConnection(url,username,password);
 		return conn;
 	}
-	
-	/**
-	 * Devuelve el total de la caja dada una fecha	
-	 */
-//	public double TotalEnCaja (String fecha){		
-//	    ResultSet rs = null;
-//	    Connection conn = null;
-//	    PreparedStatement preparedStatement = null;
-//	    
-//	    double total=0.00;
-//	    try{		
-//	    	String sql = "select( " +
-//						/*obtengo el ultimo movimiento*/
-//						"select mc1.dob_saldo " +
-//							"from Movimiento_Caja mc1 "+
-//							"where mc1.id in( "+
-//								"select max(mc2.id) "+
-//									"from dbo.Movimiento_Caja mc2 "+
-//									"where mc2.str_fecha like ? "+
-//										"and mc2.id_tipo_movimiento != 10 "+
-//										"and mc2.id_tipo_movimiento != 9 " +
-//							") " +
-//						") - ( "+
-//						/*obtengo la apertura de caja*/
-//						"select mc3.dob_saldo "+
-//							"FROM dbo.Movimiento_Caja mc3 " +
-//							"where mc3.str_fecha like ? "+
-//								"and mc3.id_tipo_movimiento = 13 "+
-//						") as 'Total en caja' ";
-//		
-//	    	conn = this.getConnection();	
-//	    	preparedStatement = conn.prepareStatement(sql);
-//			preparedStatement.setString(1, fecha);
-//			preparedStatement.setString(2, fecha);
-//			rs = preparedStatement.executeQuery();        
-//	        
-//	        if(rs.next()){
-//	        	total = rs.getDouble(1);
-//	        }
-//	        
-//		} catch (Exception e) {
-//	         e.printStackTrace();
-//	      }
-//	      finally {
-//	         if (rs != null) {
-//	        	 try { 
-//	        		 rs.close(); 
-//	        	 } catch(Exception e) {
-//	        		 
-//	        	 }
-//	         }
-//	         if (preparedStatement != null){
-//	        	 try { 
-//	        		 preparedStatement.close(); 
-//        		 } catch(Exception e) {
-//        			 
-//        		 }
-//	         }
-//	         if (conn != null) {
-//	        	 try { 
-//	        		 conn.close(); 
-//	        	 } catch(Exception e) {
-//	        		 
-//	        	 }
-//	         }
-//	      }
-//	    return total;
-//	}
-	
+		
 	
 	/**
 	 * Devuelve el desgloce del calculo de plata en caja
@@ -303,7 +236,7 @@ public class Datos implements Serializable{
 	}
 	
 	/**
-	 * Devuelve los deudores segun una moneda 	 
+	 * Devuelve los deudores en una fecha dada
 	 */
 	public ArrayList<VODesgloce> DesgloceVentasDiario(String fecha){		
 		PreparedStatement stmt = null;
@@ -331,6 +264,76 @@ public class Datos implements Serializable{
 	    	conn = this.getConnection();
 	    	stmt = conn.prepareStatement(sql);
 	    	stmt.setString(1, fecha);	    	
+	    	rs = stmt.executeQuery(); 
+	        
+	        while(rs.next()){
+	        	VODesgloce voDesgloce = new VODesgloce();        	
+	        	
+	        	voDesgloce.setCantidad(rs.getDouble("Cantidad"));
+	        	voDesgloce.setRubro(rs.getString("Rubro"));
+	        	
+	        	arrayDesgloce.add(voDesgloce);
+	        }	        
+	        
+	    } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (stmt != null){
+	        	 try { 
+	        		 stmt.close(); 
+       		 } catch(Exception e) {
+       			 
+       		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return arrayDesgloce;
+	}
+	
+	/**
+	 * Devuelve los deudores en un rango de fecha dado 
+	 */
+	public ArrayList<VODesgloce> DesgloceVentasMensual(String fechaInicial, String fechaFinal){		
+		PreparedStatement stmt = null;
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    ArrayList<VODesgloce> arrayDesgloce = new ArrayList<VODesgloce>();
+	    
+	    try{
+	    	String sql =  "select sum(lde.cantidad) as 'Cantidad', ti.str_descrip as 'Rubro' "+
+	    			"from Linea_Documento_Emitido lde "+
+	    			"join Item_CompraVenta icv "+
+	    				"on lde.id_item = icv.id "+
+	    			"join Tipo_Item ti "+
+	    				"on icv.id_tipo = ti.id "+
+	    			"where lde.id_documento in ( "+
+	    				"select id_documento_emision from Movimiento_Caja mc "+
+	    					"where mc.id_documento_emision in ( "+		
+	    						"select de1.id "+ 
+	    							"from dbo.Documentos_Emitidos de1 "+ 
+	    							"where de1.anulado != 1 "+
+	    								"and de1.str_fecha between ? and ? "+
+	    					") "+
+	    			") "+
+	    			"group by ti.str_descrip ";	
+	    	conn = this.getConnection();
+	    	stmt = conn.prepareStatement(sql);
+	    	stmt.setString(1, fechaInicial);	
+	    	stmt.setString(2, fechaFinal);
 	    	rs = stmt.executeQuery(); 
 	        
 	        while(rs.next()){
@@ -423,6 +426,70 @@ public class Datos implements Serializable{
 	         }
 	      }
 	    return arrayMoneda;
+		
+	}
+	
+	/**
+	 * Obtener listado de productos con precio compra y precio venta
+	 */
+	public ArrayList<VOPresupuesto> Presupuesto(){
+		PreparedStatement stmt = null;
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    ArrayList<VOPresupuesto> arrayPresupuesto = new ArrayList<VOPresupuesto>();
+	    
+	    try{
+	    	String sql =  "SELECT icv.str_descrip as 'Producto' "
+	    			+ ",icv.str_observaciones as 'Descripcion' "
+	    			+ ",ti.str_descrip as 'Categoria' "
+	    			+ ",icv.precio_compra_ultimo as 'Compra' "
+	    			+ ",icv.precio_venta as 'Venta' "
+	    			+ "FROM Item_CompraVenta icv "
+	    			+ "join Tipo_Item ti "
+	    			+ "on icv.id_tipo = ti.id "
+	    			+ "order by icv.str_descrip";	
+	    	conn = this.getConnection();
+	    	stmt = conn.prepareStatement(sql);	    		    	
+	    	rs = stmt.executeQuery(); 
+	        
+	        while(rs.next()){
+	        	VOPresupuesto voPresupuesto = new VOPresupuesto();        	
+	        	
+	        	voPresupuesto.setProducto(rs.getString("Producto"));
+	        	voPresupuesto.setDescripcion(rs.getString("Descripcion"));
+	        	voPresupuesto.setCategoria(rs.getString("Categoria"));
+	        	voPresupuesto.setCompra(rs.getDouble("Compra"));
+	        	voPresupuesto.setVenta(rs.getDouble("Venta"));
+	        	arrayPresupuesto.add(voPresupuesto);
+	        }	        
+	        
+	    } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (stmt != null){
+	        	 try { 
+	        		 stmt.close(); 
+       		 } catch(Exception e) {
+       			 
+       		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return arrayPresupuesto;
 		
 	}
 }
