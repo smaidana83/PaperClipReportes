@@ -14,6 +14,7 @@ import java.util.Locale;
 import valueObject.VOMoneda;
 import valueObject.VOPresupuesto;
 import valueObject.VOTotalEnCajaDesgloce;
+import valueObject.VOAcreedores;
 import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
@@ -245,22 +246,23 @@ public class Datos implements Serializable{
 	    ArrayList<VODesgloce> arrayDesgloce = new ArrayList<VODesgloce>();
 	    
 	    try{
-	    	String sql =  "select sum(lde.cantidad) as 'Cantidad', ti.str_descrip as 'Rubro' "+
-	    			"from Linea_Documento_Emitido lde "+
-	    			"join Item_CompraVenta icv "+
-	    				"on lde.id_item = icv.id "+
-	    			"join Tipo_Item ti "+
-	    				"on icv.id_tipo = ti.id "+
-	    			"where lde.id_documento in ( "+
-	    				"select id_documento_emision from Movimiento_Caja mc "+
-	    					"where mc.id_documento_emision in ( "+		
-	    						"select de1.id "+ 
-	    							"from dbo.Documentos_Emitidos de1 "+ 
-	    							"where de1.anulado != 1 "+
-	    								"and de1.str_fecha like ? "+
-	    					") "+
-	    			") "+
-	    			"group by ti.str_descrip ";	
+	    	String sql =  "select sum(lde.cantidad) as 'Cantidad', sum(lde.total) as 'Total', ti.str_descrip as 'Rubro' "
+	    			+ "from Linea_Documento_Emitido lde "
+	    			+ "join Item_CompraVenta icv "
+	    			+ "on lde.id_item = icv.id "
+	    			+ "join Tipo_Item ti "
+	    			+ "on icv.id_tipo = ti.id "
+	    			+ "where lde.id_documento in ( "
+	    			+ "select id_documento_emision from Movimiento_Caja mc "
+	    			+ "where mc.id_documento_emision in ( "
+	    			+ "select de1.id "
+	    			+ "from dbo.Documentos_Emitidos de1 "
+	    			+ "where de1.anulado != 1 "
+	    			+ "and de1.str_fecha like ? "
+	    			+ ") "
+	    			+ ") "
+	    			+ "group by ti.str_descrip" ;	
+	    	
 	    	conn = this.getConnection();
 	    	stmt = conn.prepareStatement(sql);
 	    	stmt.setString(1, fecha);	    	
@@ -271,6 +273,7 @@ public class Datos implements Serializable{
 	        	
 	        	voDesgloce.setCantidad(rs.getDouble("Cantidad"));
 	        	voDesgloce.setRubro(rs.getString("Rubro"));
+	        	voDesgloce.setTotal(rs.getDouble("Total"));
 	        	
 	        	arrayDesgloce.add(voDesgloce);
 	        }	        
@@ -314,7 +317,7 @@ public class Datos implements Serializable{
 	    ArrayList<VODesgloce> arrayDesgloce = new ArrayList<VODesgloce>();
 	    
 	    try{
-	    	String sql =  "select sum(lde.cantidad) as 'Cantidad', ti.str_descrip as 'Rubro' "+
+	    	String sql =  "select sum(lde.cantidad) as 'Cantidad', sum(lde.total) as 'Total', ti.str_descrip as 'Rubro' "+
 	    			"from Linea_Documento_Emitido lde "+
 	    			"join Item_CompraVenta icv "+
 	    				"on lde.id_item = icv.id "+
@@ -330,6 +333,7 @@ public class Datos implements Serializable{
 	    					") "+
 	    			") "+
 	    			"group by ti.str_descrip ";	
+	    	
 	    	conn = this.getConnection();
 	    	stmt = conn.prepareStatement(sql);
 	    	stmt.setString(1, fechaInicial);	
@@ -341,6 +345,7 @@ public class Datos implements Serializable{
 	        	
 	        	voDesgloce.setCantidad(rs.getDouble("Cantidad"));
 	        	voDesgloce.setRubro(rs.getString("Rubro"));
+	        	voDesgloce.setTotal(rs.getDouble("Total"));
 	        	
 	        	arrayDesgloce.add(voDesgloce);
 	        }	        
@@ -491,5 +496,70 @@ public class Datos implements Serializable{
 	      }
 	    return arrayPresupuesto;
 		
+	}
+	
+	/**
+	 * Devuelve los acreedores segun una moneda 	 
+	 */
+	public ArrayList<VOAcreedores> Acreedores(int idMoneda){		
+		PreparedStatement stmt = null;
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    ArrayList<VOAcreedores> arrayAcreedores = new ArrayList<VOAcreedores>();
+	    
+	    try{
+	    	String sql =   "select prov.str_nombre as 'Proveedor', (cc.saldo) as 'Saldo deuda' "
+	    			+ "from dbo.Proveedores prov "
+	    			+ "join CC_Proveedor cc "
+	    			+ "on prov.id = cc.id_proveedor "
+	    			+ "join dbo.monedas mon "
+	    			+ "on cc.id_moneda = mon.id "
+	    			+ "where prov.id in ( "
+	    			+ "SELECT cc2.id_proveedor "
+	    			+ "FROM CC_Proveedor cc2 "
+	    			+ "where cc2.saldo != 0 and cc2.id_moneda = ? "
+	    			+ ") and cc.id_moneda = ? ";
+	    			
+	    	conn = this.getConnection();
+	    	stmt = conn.prepareStatement(sql);
+	    	stmt.setInt(1, idMoneda);
+	    	stmt.setInt(2, idMoneda);
+	    	rs = stmt.executeQuery(); 
+	        
+	        while(rs.next()){
+	        	VOAcreedores voAcreedores = new VOAcreedores();        	
+	        	
+	        	voAcreedores.setNombre(rs.getString("Proveedor"));
+	        	voAcreedores.setSaldo(rs.getDouble("Saldo deuda"));	        	        	
+	        	arrayAcreedores.add(voAcreedores);
+	        }	        
+	        
+	    } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (stmt != null){
+	        	 try { 
+	        		 stmt.close(); 
+       		 } catch(Exception e) {
+       			 
+       		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return arrayAcreedores;
 	}
 }

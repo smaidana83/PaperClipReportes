@@ -6,6 +6,7 @@ import java.util.Date;
 
 import datos.Datos;
 import utils.Utils;
+import valueObject.VOAcreedores;
 import valueObject.VODesgloce;
 import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
@@ -52,6 +53,10 @@ public class Logica implements Serializable{
 	
 	public ArrayList<VOPresupuesto> Presupuesto(){
 		return datos.Presupuesto();
+	}
+	
+	public ArrayList<VOAcreedores> Acreedores(int idMoneda){
+		return datos.Acreedores(idMoneda);
 	}
 
 }

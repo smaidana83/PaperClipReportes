@@ -153,7 +153,7 @@ public class TotalEnCaja extends CustomComponent implements View {
 							}
 							
 							//Venta cliente credito
-							if(voTotalEnCajaDesgloce.getDescripcion().equals("Entrada por venta crédito")){
+							if(voTotalEnCajaDesgloce.getDescripcion().equals("Entrada por pago CC")){
 								txtVentaClienteCredito.setConvertedValue(((double)txtVentaClienteCredito.getConvertedValue()) + voTotalEnCajaDesgloce.getCredito() + voTotalEnCajaDesgloce.getDebito());
 							}
 							

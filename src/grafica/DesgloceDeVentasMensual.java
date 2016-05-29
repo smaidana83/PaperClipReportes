@@ -141,6 +141,17 @@ public class DesgloceDeVentasMensual extends CustomComponent implements View{
 			public void valueChange(ValueChangeEvent event) {
 				// TODO Auto-generated method stub		
 				//getDesgloceMensual();	
+				if(tblDesgloce != null){
+					mainLayout.removeComponent(tblDesgloce);			
+				}
+				
+				if(pieChart != null){
+					mainLayout.removeComponent(pieChart);
+				}
+				
+				if(btnExcelExport != null){
+					mainLayout.removeComponent(btnExcelExport);
+				}
 				endDate.setRangeStart(startDate.getValue());
 			}
 		});
@@ -271,7 +282,7 @@ public class DesgloceDeVentasMensual extends CustomComponent implements View{
 				ds = new BeanItemContainer<VODesgloce>(VODesgloce.class, array);
 				tblDesgloce.removeAllItems();
 				tblDesgloce.setContainerDataSource(ds);
-				tblDesgloce.setVisibleColumns("rubro","cantidad");
+				tblDesgloce.setVisibleColumns("rubro","cantidad","total");
 				tblDesgloce.setPageLength(ds.size());
 				
 				mainLayout.addComponent(btnExcelExport);

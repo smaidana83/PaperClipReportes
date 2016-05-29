@@ -204,7 +204,7 @@ public class DesgloceDeVentasDiario extends CustomComponent implements View {
 				ds = new BeanItemContainer<VODesgloce>(VODesgloce.class, array);
 				tblDesgloce.removeAllItems();
 				tblDesgloce.setContainerDataSource(ds);
-				tblDesgloce.setVisibleColumns("rubro","cantidad");
+				tblDesgloce.setVisibleColumns("rubro","cantidad","total");
 				tblDesgloce.setPageLength(ds.size());
 				
 				mainLayout.addComponent(btnExcelExport);

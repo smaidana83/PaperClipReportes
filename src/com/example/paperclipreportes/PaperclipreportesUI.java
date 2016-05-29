@@ -27,6 +27,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import grafica.Acreedores;
 import grafica.DesgloceDeVentasDiario;
 import grafica.DesgloceDeVentasMensual;
 import grafica.Deudores;
@@ -49,10 +50,11 @@ public class PaperclipreportesUI extends UI {
 	protected static final String DESGLOCEDEVENTASDIARIO = "desgloceDeVentasDiario";
 	protected static final String DESGLOCEDEVENTASMENSUAL = "desgloceDeVentasMensual";
 	protected static final String PRESUPUESTO = "presupuesto";
+	protected static final String ACREEDORES = "acreedores";
 	
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = PaperclipreportesUI.class, widgetset = "com.example.paperclipreportes.widgetset.PaperclipreportesWidgetset")
+	@VaadinServletConfiguration(productionMode = true, ui = PaperclipreportesUI.class, widgetset = "com.example.paperclipreportes.widgetset.PaperclipreportesWidgetset")
 	public static class Servlet extends VaadinServlet {		
         protected void servletInitialized() throws ServletException {
             super.servletInitialized();
@@ -117,6 +119,9 @@ public class PaperclipreportesUI extends UI {
 				case "Presupuesto":
 					contentNavigator.navigateTo(PRESUPUESTO);
 					break;
+				case "Acreedores":
+					contentNavigator.navigateTo(ACREEDORES);
+					break;
 				default:
 					System.out.println("Selecciono uno no valido");
 					break;
@@ -128,21 +133,13 @@ public class PaperclipreportesUI extends UI {
 				
 		MenuItem reportes = menuPrincipal.addItem("", new ThemeResource("icons/menu.png"), null);
 		reportes.setStyleName("menuPrincipal");
-				
-//		MenuItem totalEnCaja = reportes.addItem("Total en caja", menuCommand);
-//		MenuItem flujoDeCaja = reportes.addItem("Flujo de caja", menuCommand);
-//		MenuItem deudores = reportes.addItem("Deudores", menuCommand);		
-//		MenuItem desgloce = reportes.addItem("Desgloce de ventas", null);
-//		MenuItem presupuesto = reportes.addItem("Presupuesto", menuCommand);		
-//		
-//		MenuItem desgloceDeVentasDiario = desgloce.addItem("Diario", menuCommand);
-//		MenuItem desgloceDeVentasMensual = desgloce.addItem("Mensual", menuCommand);
 		
 		reportes.addItem("Total en caja", menuCommand);
 		reportes.addItem("Flujo de caja", menuCommand);
 		reportes.addItem("Deudores", menuCommand);		
 		MenuItem desgloce = reportes.addItem("Desgloce de ventas", null);
-		reportes.addItem("Presupuesto", menuCommand);		
+		reportes.addItem("Presupuesto", menuCommand);
+		reportes.addItem("Acreedores", menuCommand);
 	
 		desgloce.addItem("Diario", menuCommand);
 		desgloce.addItem("Mensual", menuCommand);
@@ -184,6 +181,7 @@ public class PaperclipreportesUI extends UI {
 		contentNavigator.addView(DESGLOCEDEVENTASDIARIO, new DesgloceDeVentasDiario());	
 		contentNavigator.addView(DESGLOCEDEVENTASMENSUAL, new DesgloceDeVentasMensual());
 		contentNavigator.addView(PRESUPUESTO, new Presupuesto());
+		contentNavigator.addView(ACREEDORES, new Acreedores());
 	}
 
 }

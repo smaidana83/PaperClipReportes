@@ -7,6 +7,7 @@ public class VODesgloce implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private double cantidad;
 	private String rubro;
+	private double total;
 	
 	public double getCantidad() {
 		return cantidad;
@@ -20,4 +21,10 @@ public class VODesgloce implements Serializable {
 	public void setRubro(String rubro) {
 		this.rubro = rubro;
 	}
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
+	}	
 }
