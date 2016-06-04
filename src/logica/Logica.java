@@ -13,6 +13,7 @@ import valueObject.VOFlujoCaja;
 import valueObject.VOMoneda;
 import valueObject.VOPresupuesto;
 import valueObject.VOTotalEnCajaDesgloce;
+import valueObject.VOTotalEnCajaDesglocePorFecha;
 
 public class Logica implements Serializable{
 	
@@ -57,6 +58,10 @@ public class Logica implements Serializable{
 	
 	public ArrayList<VOAcreedores> Acreedores(int idMoneda){
 		return datos.Acreedores(idMoneda);
+	}
+	
+	public ArrayList<VOTotalEnCajaDesglocePorFecha> TotalEnCajaDesglocePorFecha(Date fechaInicial, Date fechaFinal){
+		return datos.TotalEnCajaDesglocePorFecha(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
 	}
 
 }

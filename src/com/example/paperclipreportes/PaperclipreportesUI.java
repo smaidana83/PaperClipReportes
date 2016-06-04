@@ -34,6 +34,7 @@ import grafica.Deudores;
 import grafica.FlujoDeCaja;
 import grafica.Presupuesto;
 import grafica.TotalEnCaja;
+import grafica.TotalEnCajaPorFecha;
 import utils.MyConverterFactory;
 
 @SuppressWarnings("serial")
@@ -51,6 +52,7 @@ public class PaperclipreportesUI extends UI {
 	protected static final String DESGLOCEDEVENTASMENSUAL = "desgloceDeVentasMensual";
 	protected static final String PRESUPUESTO = "presupuesto";
 	protected static final String ACREEDORES = "acreedores";
+	protected static final String TOTALENCAJAPORFECHA = "totalEnCajaPorFecha";
 	
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -122,6 +124,9 @@ public class PaperclipreportesUI extends UI {
 				case "Acreedores":
 					contentNavigator.navigateTo(ACREEDORES);
 					break;
+				case "Total en caja por fecha":
+					contentNavigator.navigateTo(TOTALENCAJAPORFECHA);
+					break;
 				default:
 					System.out.println("Selecciono uno no valido");
 					break;
@@ -135,6 +140,7 @@ public class PaperclipreportesUI extends UI {
 		reportes.setStyleName("menuPrincipal");
 		
 		reportes.addItem("Total en caja", menuCommand);
+		reportes.addItem("Total en caja por fecha", menuCommand);
 		reportes.addItem("Flujo de caja", menuCommand);
 		reportes.addItem("Deudores", menuCommand);		
 		MenuItem desgloce = reportes.addItem("Desgloce de ventas", null);
@@ -182,6 +188,7 @@ public class PaperclipreportesUI extends UI {
 		contentNavigator.addView(DESGLOCEDEVENTASMENSUAL, new DesgloceDeVentasMensual());
 		contentNavigator.addView(PRESUPUESTO, new Presupuesto());
 		contentNavigator.addView(ACREEDORES, new Acreedores());
+		contentNavigator.addView(TOTALENCAJAPORFECHA, new TotalEnCajaPorFecha());
 	}
 
 }

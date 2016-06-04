@@ -14,6 +14,7 @@ import java.util.Locale;
 import valueObject.VOMoneda;
 import valueObject.VOPresupuesto;
 import valueObject.VOTotalEnCajaDesgloce;
+import valueObject.VOTotalEnCajaDesglocePorFecha;
 import valueObject.VOAcreedores;
 import valueObject.VODesgloce;
 import valueObject.VODeudores;
@@ -561,5 +562,66 @@ public class Datos implements Serializable{
 	         }
 	      }
 	    return arrayAcreedores;
+	}
+	
+	/**
+	 * Devuelve el total en caja detallado por rango de fecha
+	 */
+	public ArrayList<VOTotalEnCajaDesglocePorFecha> TotalEnCajaDesglocePorFecha (String fechaInicio, String fechaFin){		
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    PreparedStatement preparedStatement = null;
+	    ArrayList<VOTotalEnCajaDesglocePorFecha> array = new ArrayList<VOTotalEnCajaDesglocePorFecha>();
+	    	    
+	    try{		
+	    	String sql = "SELECT mov.str_fecha as 'Fecha', sum(mov.dob_haber) + sum(mov.dob_debe) as 'Total' "
+	    			+ "FROM (Movimiento_Caja mov "
+	    			+ "join Tipo_Movimiento_Caja tipo "
+	    			+ "on  tipo.id = mov.id_tipo_movimiento) "
+	    			+ "where mov.str_fecha between ? and ? and (mov.id_tipo_movimiento = 1 or mov.id_tipo_movimiento = 12) "
+	    			+ "group by mov.str_fecha "
+	    			+ "order by mov.str_fecha asc ";
+		
+	    	conn = this.getConnection();	
+	    	preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, fechaInicio);	
+			preparedStatement.setString(2, fechaFin);
+			rs = preparedStatement.executeQuery();        
+	        
+	        while(rs.next()){
+	        	VOTotalEnCajaDesglocePorFecha aux = new VOTotalEnCajaDesglocePorFecha();
+	        	aux.setFecha(rs.getString("Fecha"));
+	        	aux.setTotal(rs.getDouble("Total"));
+	        		        	
+	        	array.add(aux);	        	
+	        }
+	        
+		} catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (preparedStatement != null){
+	        	 try { 
+	        		 preparedStatement.close(); 
+        		 } catch(Exception e) {
+        			 
+        		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return array;
 	}
 }
