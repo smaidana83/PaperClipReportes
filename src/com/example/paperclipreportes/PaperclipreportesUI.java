@@ -135,20 +135,56 @@ public class PaperclipreportesUI extends UI {
 			}
 		};
 		
+		MenuBar.Command totalEnCajaCommand = new MenuBar.Command() {
+			public void menuSelected(MenuItem selectedItem) {
+				switch(selectedItem.getText()){				
+				case "Diario":
+					contentNavigator.navigateTo(TOTALENCAJA);
+					break;
+				case "Mensual":
+					contentNavigator.navigateTo(TOTALENCAJAPORFECHA);
+					break;				
+				default:
+					System.out.println("Selecciono uno no valido");
+					break;
+					
+				}
+			}
+		};
+		
+		MenuBar.Command desgloceCommand = new MenuBar.Command() {
+			public void menuSelected(MenuItem selectedItem) {
+				switch(selectedItem.getText()){				
+				case "Diario":
+					contentNavigator.navigateTo(DESGLOCEDEVENTASDIARIO);
+					break;
+				case "Mensual":
+					contentNavigator.navigateTo(DESGLOCEDEVENTASMENSUAL);
+					break;				
+				default:
+					System.out.println("Selecciono uno no valido");
+					break;
+					
+				}
+			}
+		};
+		
 				
 		MenuItem reportes = menuPrincipal.addItem("", new ThemeResource("icons/menu.png"), null);
 		reportes.setStyleName("menuPrincipal");
 		
-		reportes.addItem("Total en caja", menuCommand);
-		reportes.addItem("Total en caja por fecha", menuCommand);
+		MenuItem totalEnCaja = reportes.addItem("Total en caja",null);		
+		totalEnCaja.addItem("Diario", totalEnCajaCommand);
+		totalEnCaja.addItem("Mensual", totalEnCajaCommand);
 		reportes.addItem("Flujo de caja", menuCommand);
 		reportes.addItem("Deudores", menuCommand);		
 		MenuItem desgloce = reportes.addItem("Desgloce de ventas", null);
+		desgloce.addItem("Diario", desgloceCommand);
+		desgloce.addItem("Mensual", desgloceCommand);
 		reportes.addItem("Presupuesto", menuCommand);
 		reportes.addItem("Acreedores", menuCommand);
 	
-		desgloce.addItem("Diario", menuCommand);
-		desgloce.addItem("Mensual", menuCommand);
+		
 		
 		//Logo
 		FileResource paperClipLogoResource = new FileResource(new File(basepath +"/WEB-INF/images/logo.png"));		
