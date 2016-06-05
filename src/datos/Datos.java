@@ -509,22 +509,21 @@ public class Datos implements Serializable{
 	    ArrayList<VOAcreedores> arrayAcreedores = new ArrayList<VOAcreedores>();
 	    
 	    try{
-	    	String sql =   "select prov.str_nombre as 'Proveedor', (cc.saldo) as 'Saldo deuda' "
-	    			+ "from dbo.Proveedores prov "
+	    	String sql =   "select prov.str_nombre as 'Proveedor', sum(mov.dob_debe) + sum(mov.dob_haber) as 'Saldo deuda' "
+	    			+ "from Movimiento_CC_Proveedor mov "
 	    			+ "join CC_Proveedor cc "
+	    			+ "on cc.id = mov.id_cc "
+	    			+ "join Proveedores prov "
 	    			+ "on prov.id = cc.id_proveedor "
-	    			+ "join dbo.monedas mon "
-	    			+ "on cc.id_moneda = mon.id "
-	    			+ "where prov.id in ( "
-	    			+ "SELECT cc2.id_proveedor "
-	    			+ "FROM CC_Proveedor cc2 "
-	    			+ "where cc2.saldo != 0 and cc2.id_moneda = ? "
-	    			+ ") and cc.id_moneda = ? ";
+	    			+ "join Monedas mon "
+	    			+ "on mon.id = cc.id_moneda "
+	    			+ "where cc.id_moneda = ? "
+	    			+ "group by prov.str_nombre, mon.str_simbolo "
+	    			+ "having sum(mov.dob_debe) + sum(mov.dob_haber) != 0 ";
 	    			
 	    	conn = this.getConnection();
 	    	stmt = conn.prepareStatement(sql);
-	    	stmt.setInt(1, idMoneda);
-	    	stmt.setInt(2, idMoneda);
+	    	stmt.setInt(1, idMoneda);	    	
 	    	rs = stmt.executeQuery(); 
 	        
 	        while(rs.next()){
