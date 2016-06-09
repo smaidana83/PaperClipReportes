@@ -61,7 +61,22 @@ public class Logica implements Serializable{
 	}
 	
 	public ArrayList<VOTotalEnCajaDesglocePorFecha> TotalEnCajaDesglocePorFecha(Date fechaInicial, Date fechaFinal){
-		return datos.TotalEnCajaDesglocePorFecha(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		ArrayList<VOTotalEnCajaDesglocePorFecha> array = new ArrayList<VOTotalEnCajaDesglocePorFecha>();
+		ArrayList<VOTotalEnCajaDesglocePorFecha> haber = datos.TotalEnCajaDesglocePorFechaHaber(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		ArrayList<VOTotalEnCajaDesglocePorFecha> debe = datos.TotalEnCajaDesglocePorFechaDeber(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		
+		for (VOTotalEnCajaDesglocePorFecha VOhaber : haber) {
+			VOTotalEnCajaDesglocePorFecha add = new VOTotalEnCajaDesglocePorFecha();
+			for (VOTotalEnCajaDesglocePorFecha VOdebe : debe) {
+				if(VOhaber.getFecha().equals(VOdebe.getFecha())){					
+					add.setTotal(VOdebe.getTotal());					
+				}			
+			}
+			add.setTotal(add.getTotal() + VOhaber.getTotal());
+			add.setFecha(VOhaber.getFecha());
+			array.add(add);			
+		}
+		return array;
 	}
 
 }

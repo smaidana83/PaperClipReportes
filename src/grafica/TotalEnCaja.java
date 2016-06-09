@@ -149,7 +149,12 @@ public class TotalEnCaja extends CustomComponent implements View {
 							
 							//Venta diaria
 							if(voTotalEnCajaDesgloce.getDescripcion().equals("Entrada por venta contado") || voTotalEnCajaDesgloce.getDescripcion().equals("Anulación venta contado")){
-								txtVentaDiaria.setConvertedValue(((double)txtVentaDiaria.getConvertedValue()) + voTotalEnCajaDesgloce.getCredito() + voTotalEnCajaDesgloce.getDebito());
+//								txtVentaDiaria.setConvertedValue(((double)txtVentaDiaria.getConvertedValue()) + voTotalEnCajaDesgloce.getCredito() + voTotalEnCajaDesgloce.getDebito());
+								if(voTotalEnCajaDesgloce.getDescripcion().equals("Anulación venta contado")){
+									txtVentaDiaria.setConvertedValue(((double)txtVentaDiaria.getConvertedValue()) + voTotalEnCajaDesgloce.getDebito());
+								}else{
+									txtVentaDiaria.setConvertedValue(((double)txtVentaDiaria.getConvertedValue()) + voTotalEnCajaDesgloce.getCredito());
+								}
 							}
 							
 							//Venta cliente credito
