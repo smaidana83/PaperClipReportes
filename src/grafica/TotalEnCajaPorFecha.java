@@ -24,6 +24,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -53,6 +54,7 @@ public class TotalEnCajaPorFecha extends CustomComponent implements View{
 	private Button btnStartSubstractOneDay;
 	private Button btnEndAddOneDay;
 	private Button btnEndSubstractOneDay;
+	private TextField txtTotal;
 
 	/**
 	 * The constructor should first build the main layout, set the
@@ -137,16 +139,20 @@ public class TotalEnCajaPorFecha extends CustomComponent implements View{
 				// TODO Auto-generated method stub		
 				//getDesgloceMensual();	
 				if(tblDesgloce != null){
-					mainLayout.removeComponent(tblDesgloce);			
+					mainLayout.removeComponent(tblDesgloce);					
 				}
 				
 				if(lineChart != null){
-					mainLayout.removeComponent(lineChart);
+					mainLayout.removeComponent(lineChart);					
 				}
 				
 				if(btnExcelExport != null){
 					mainLayout.removeComponent(btnExcelExport);
 				}
+				
+				if(txtTotal != null){
+					mainLayout.removeComponent(txtTotal);
+				}				
 				endDate.setRangeStart(startDate.getValue());
 			}
 		});
@@ -223,6 +229,11 @@ public class TotalEnCajaPorFecha extends CustomComponent implements View{
 		lblMessage.setSizeUndefined();
 		mainLayout.addComponent(lblMessage);
 		
+		txtTotal = new TextField();	
+		txtTotal.setCaption("Total");
+		txtTotal.setConverter(Double.class);
+		//mainLayout.addComponent(txtTotal);
+
 		tblDesgloce = new Table();		
 		tblDesgloce.setSizeFull();
 		
@@ -248,6 +259,10 @@ public class TotalEnCajaPorFecha extends CustomComponent implements View{
 			mainLayout.removeComponent(lineChart);
 		}
 		
+		if(txtTotal != null){
+			mainLayout.removeComponent(txtTotal);
+		}
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.DATE, -7);
@@ -257,6 +272,10 @@ public class TotalEnCajaPorFecha extends CustomComponent implements View{
 	}
 	
 	private void getDesgloceMensual(){
+		if(txtTotal != null){
+			mainLayout.removeComponent(txtTotal);
+		}
+		
 		if(tblDesgloce != null){
 			mainLayout.removeComponent(tblDesgloce);			
 		}
@@ -269,16 +288,24 @@ public class TotalEnCajaPorFecha extends CustomComponent implements View{
 			mainLayout.removeComponent(btnExcelExport);
 		}
 		
+		txtTotal.setConvertedValue(0.00);
+		
 		if(startDate.isValid() && endDate.isValid()){			
 			ArrayList<VOTotalEnCajaDesglocePorFecha> array =  logica.TotalEnCajaDesglocePorFecha(startDate.getValue(), endDate.getValue());
 			if(array != null && !array.isEmpty()){
+				for (VOTotalEnCajaDesglocePorFecha voTotalEnCajaDesglocePorFecha : array) {
+					txtTotal.setConvertedValue(((double)txtTotal.getConvertedValue()) + voTotalEnCajaDesglocePorFecha.getTotal());					
+				}
+				
 				lblMessage.setValue("");
+				
+				mainLayout.addComponent(txtTotal);
 				buildChart(array);
 				ds = new BeanItemContainer<VOTotalEnCajaDesglocePorFecha>(VOTotalEnCajaDesglocePorFecha.class, array);
 				tblDesgloce.removeAllItems();
 				tblDesgloce.setContainerDataSource(ds);
 				tblDesgloce.setVisibleColumns("fecha","total");
-				tblDesgloce.setPageLength(ds.size());
+				tblDesgloce.setPageLength(ds.size());				
 				
 				mainLayout.addComponent(btnExcelExport);
 				mainLayout.addComponent(tblDesgloce);	
