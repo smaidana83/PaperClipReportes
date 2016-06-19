@@ -12,6 +12,7 @@ import valueObject.VODeudores;
 import valueObject.VOFlujoCaja;
 import valueObject.VOMoneda;
 import valueObject.VOPresupuesto;
+import valueObject.VORankingVentas;
 import valueObject.VOTotalEnCajaDesgloce;
 import valueObject.VOTotalEnCajaDesglocePorFecha;
 
@@ -19,10 +20,6 @@ public class Logica implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private Datos datos = new Datos();
-	
-//	public double TotalEnCaja(Date fecha){
-//		return datos.TotalEnCaja(Utils.convertDateToString(fecha));		
-//	}
 	
 	public ArrayList<VOFlujoCaja> FlujoDeCaja(Date fecha, int idMoneda){
 		return datos.FlujoDeCaja(Utils.convertDateToString(fecha),idMoneda);		
@@ -77,6 +74,22 @@ public class Logica implements Serializable{
 			array.add(add);			
 		}
 		return array;
+	}
+	
+	public ArrayList<VORankingVentas> RankingVentasDiario(int top,Date fecha){
+		if(top != 0){
+			return datos.RankingVentas(top,Utils.convertDateToString(fecha));
+		}else{
+			return datos.RankingVentas(Utils.convertDateToString(fecha));
+		}
+	}
+	
+	public ArrayList<VORankingVentas> RankingVentasPorFecha(int top, Date fechaInicial, Date fechaFinal){
+		if(top != 0){
+			return datos.RankingVentasPorFecha(top, Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		}else{
+			return datos.RankingVentasPorFecha(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		}
 	}
 
 }

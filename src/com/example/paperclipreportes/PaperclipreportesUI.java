@@ -33,6 +33,8 @@ import grafica.DesgloceDeVentasMensual;
 import grafica.Deudores;
 import grafica.FlujoDeCaja;
 import grafica.Presupuesto;
+import grafica.RankingDeVentasPorFecha;
+import grafica.RankingDeVentasDiario;
 import grafica.TotalEnCaja;
 import grafica.TotalEnCajaPorFecha;
 import utils.MyConverterFactory;
@@ -53,6 +55,8 @@ public class PaperclipreportesUI extends UI {
 	protected static final String PRESUPUESTO = "presupuesto";
 	protected static final String ACREEDORES = "acreedores";
 	protected static final String TOTALENCAJAPORFECHA = "totalEnCajaPorFecha";
+	protected static final String RANKINGDEVENTASDIARIO = "rankingDeVentasDiario";
+	protected static final String RANKINGDEVENTASPORFECHA = "rankingDeVentasPorFecha";
 	
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -169,6 +173,23 @@ public class PaperclipreportesUI extends UI {
 			}
 		};
 		
+		MenuBar.Command rankingCommand = new MenuBar.Command() {
+			public void menuSelected(MenuItem selectedItem) {
+				switch(selectedItem.getText()){				
+				case "Diario":
+					contentNavigator.navigateTo(RANKINGDEVENTASDIARIO);
+					break;
+				case "Mensual":
+					contentNavigator.navigateTo(RANKINGDEVENTASPORFECHA);
+					break;				
+				default:
+					System.out.println("Selecciono uno no valido");
+					break;
+					
+				}
+			}
+		};
+		
 				
 		MenuItem reportes = menuPrincipal.addItem("", new ThemeResource("icons/menu.png"), null);
 		reportes.setStyleName("menuPrincipal");
@@ -183,6 +204,9 @@ public class PaperclipreportesUI extends UI {
 		desgloce.addItem("Mensual", desgloceCommand);
 		reportes.addItem("Presupuesto", menuCommand);
 		reportes.addItem("Acreedores", menuCommand);
+		MenuItem ranking = reportes.addItem("Ranking de ventas", null);
+		ranking.addItem("Diario", rankingCommand);
+		ranking.addItem("Mensual", rankingCommand);
 	
 		
 		
@@ -225,6 +249,8 @@ public class PaperclipreportesUI extends UI {
 		contentNavigator.addView(PRESUPUESTO, new Presupuesto());
 		contentNavigator.addView(ACREEDORES, new Acreedores());
 		contentNavigator.addView(TOTALENCAJAPORFECHA, new TotalEnCajaPorFecha());
+		contentNavigator.addView(RANKINGDEVENTASDIARIO, new RankingDeVentasDiario());
+		contentNavigator.addView(RANKINGDEVENTASPORFECHA, new RankingDeVentasPorFecha());
 	}
 
 }
