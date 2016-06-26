@@ -34,6 +34,7 @@ import grafica.Deudores;
 import grafica.FlujoDeCaja;
 import grafica.Presupuesto;
 import grafica.RankingDeVentasPorFecha;
+import grafica.RankingDeVentasPorFechaConGanancia;
 import grafica.RankingDeVentasDiario;
 import grafica.TotalEnCaja;
 import grafica.TotalEnCajaPorFecha;
@@ -57,6 +58,7 @@ public class PaperclipreportesUI extends UI {
 	protected static final String TOTALENCAJAPORFECHA = "totalEnCajaPorFecha";
 	protected static final String RANKINGDEVENTASDIARIO = "rankingDeVentasDiario";
 	protected static final String RANKINGDEVENTASPORFECHA = "rankingDeVentasPorFecha";
+	protected static final String RANKINGDEVENTASPORFECHACONGANANCIA = "rankingDeVentasPorFechaConGanancia";
 	
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -181,7 +183,10 @@ public class PaperclipreportesUI extends UI {
 					break;
 				case "Mensual":
 					contentNavigator.navigateTo(RANKINGDEVENTASPORFECHA);
-					break;				
+					break;	
+				case "Ganancia":
+					contentNavigator.navigateTo(RANKINGDEVENTASPORFECHACONGANANCIA);
+					break;
 				default:
 					System.out.println("Selecciono uno no valido");
 					break;
@@ -207,6 +212,7 @@ public class PaperclipreportesUI extends UI {
 		MenuItem ranking = reportes.addItem("Ranking de ventas", null);
 		ranking.addItem("Diario", rankingCommand);
 		ranking.addItem("Mensual", rankingCommand);
+		ranking.addItem("Ganancia", rankingCommand);
 	
 		
 		
@@ -251,6 +257,7 @@ public class PaperclipreportesUI extends UI {
 		contentNavigator.addView(TOTALENCAJAPORFECHA, new TotalEnCajaPorFecha());
 		contentNavigator.addView(RANKINGDEVENTASDIARIO, new RankingDeVentasDiario());
 		contentNavigator.addView(RANKINGDEVENTASPORFECHA, new RankingDeVentasPorFecha());
+		contentNavigator.addView(RANKINGDEVENTASPORFECHACONGANANCIA, new RankingDeVentasPorFechaConGanancia());
 	}
 
 }

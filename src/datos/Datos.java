@@ -14,6 +14,7 @@ import java.util.Locale;
 import valueObject.VOMoneda;
 import valueObject.VOPresupuesto;
 import valueObject.VORankingVentas;
+import valueObject.VORankingVentasConGanancia;
 import valueObject.VOTotalEnCajaDesgloce;
 import valueObject.VOTotalEnCajaDesglocePorFecha;
 import valueObject.VOAcreedores;
@@ -937,6 +938,159 @@ public class Datos implements Serializable{
 	        	aux.setItem(rs.getString("Item"));
 	        	aux.setCantidad(rs.getDouble("Cantidad"));
 	        	aux.setTotal(rs.getDouble("Importe Total"));
+	        		        	
+	        	array.add(aux);	        	
+	        }
+	        
+		} catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (preparedStatement != null){
+	        	 try { 
+	        		 preparedStatement.close(); 
+        		 } catch(Exception e) {
+        			 
+        		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return array;
+	}
+	
+	/**
+	 * Devuelve el ranking de items vendidos en un rango de fechas con ganancia
+	 */
+	public ArrayList<VORankingVentasConGanancia> RankingVentasPorFechaConGanancia (int top, String fechaInicial, String fechaFinal){		
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    PreparedStatement preparedStatement = null;
+	    ArrayList<VORankingVentasConGanancia> array = new ArrayList<VORankingVentasConGanancia>();
+	    	    
+	    try{		
+	    	String sql = "select top (?) icv.str_descrip as 'Item' , sum(lde.cantidad) as 'Cantidad', "
+	    			+ "sum((icv.precio_compra_ultimo/icv.cant_ref_precio_compra)*lde.cantidad) as 'Costo', "
+	    			+ "sum((icv.precio_venta/icv.cant_ref_precio_venta)*lde.cantidad) as 'Venta', "
+	    			+ "sum(((icv.precio_venta/icv.cant_ref_precio_venta)*lde.cantidad) - ((icv.precio_compra_ultimo/icv.cant_ref_precio_compra)*lde.cantidad)) as  'Ganancia' "
+	    			+ "from Linea_Documento_Emitido lde "
+	    			+ "join Item_CompraVenta icv "
+	    			+ "on lde.id_item = icv.id "
+	    			+ "where lde.id_documento in ( "
+	    			+ "select id_documento_emision from Movimiento_Caja mc "
+	    			+ "where mc.id_documento_emision in ( "
+	    			+ "select de1.id "
+	    			+ "from dbo.Documentos_Emitidos de1 "
+	    			+ "where de1.anulado != 1 "
+	    			+ "and de1.str_fecha between ? and ? "
+	    			+ ") "
+	    			+ ") "
+	    			+ "group by icv.str_descrip "
+	    			+ "order by Ganancia desc ";
+
+		
+	    	conn = this.getConnection();	
+	    	preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setInt(1, top);	
+			preparedStatement.setString(2, fechaInicial);
+			preparedStatement.setString(3, fechaFinal);
+			rs = preparedStatement.executeQuery();        
+	        
+	        while(rs.next()){
+	        	VORankingVentasConGanancia aux = new VORankingVentasConGanancia();
+	        	aux.setItem(rs.getString("Item"));
+	        	aux.setCantidad(rs.getDouble("Cantidad"));
+	        	aux.setCosto(rs.getDouble("Costo"));
+	        	aux.setVenta(rs.getDouble("Venta"));
+	        	aux.setGanancia(rs.getDouble("Ganancia"));
+	        		        	
+	        	array.add(aux);	        	
+	        }
+	        
+		} catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      finally {
+	         if (rs != null) {
+	        	 try { 
+	        		 rs.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	         if (preparedStatement != null){
+	        	 try { 
+	        		 preparedStatement.close(); 
+        		 } catch(Exception e) {
+        			 
+        		 }
+	         }
+	         if (conn != null) {
+	        	 try { 
+	        		 conn.close(); 
+	        	 } catch(Exception e) {
+	        		 
+	        	 }
+	         }
+	      }
+	    return array;
+	}
+	
+	/**
+	 * Devuelve el ranking de todos los items vendidos en un rango de fechas
+	 */
+	public ArrayList<VORankingVentasConGanancia> RankingVentasPorFechaConGanancia (String fechaInicial, String fechaFinal){		
+	    ResultSet rs = null;
+	    Connection conn = null;
+	    PreparedStatement preparedStatement = null;
+	    ArrayList<VORankingVentasConGanancia> array = new ArrayList<VORankingVentasConGanancia>();
+	    	    
+	    try{		
+	    	String sql = "select icv.str_descrip as 'Item' , sum(lde.cantidad) as 'Cantidad', "
+	    			+ "sum((icv.precio_compra_ultimo/icv.cant_ref_precio_compra)*lde.cantidad) as 'Costo', "
+	    			+ "sum((icv.precio_venta/icv.cant_ref_precio_venta)*lde.cantidad) as 'Venta', "
+	    			+ "sum(((icv.precio_venta/icv.cant_ref_precio_venta)*lde.cantidad) - ((icv.precio_compra_ultimo/icv.cant_ref_precio_compra)*lde.cantidad)) as  'Ganancia' "
+	    			+ "from Linea_Documento_Emitido lde "
+	    			+ "join Item_CompraVenta icv "
+	    			+ "on lde.id_item = icv.id "
+	    			+ "where lde.id_documento in ( "
+	    			+ "select id_documento_emision from Movimiento_Caja mc "
+	    			+ "where mc.id_documento_emision in ( "
+	    			+ "select de1.id "
+	    			+ "from dbo.Documentos_Emitidos de1 "
+	    			+ "where de1.anulado != 1 "
+	    			+ "and de1.str_fecha between ? and ? "
+	    			+ ") "
+	    			+ ") "
+	    			+ "group by icv.str_descrip "
+	    			+ "order by Ganancia desc ";
+
+		
+	    	conn = this.getConnection();	
+	    	preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, fechaInicial);
+			preparedStatement.setString(2, fechaFinal);
+			rs = preparedStatement.executeQuery();        
+	        
+			while(rs.next()){
+	        	VORankingVentasConGanancia aux = new VORankingVentasConGanancia();
+	        	aux.setItem(rs.getString("Item"));
+	        	aux.setCantidad(rs.getDouble("Cantidad"));
+	        	aux.setCosto(rs.getDouble("Costo"));
+	        	aux.setVenta(rs.getDouble("Venta"));
+	        	aux.setGanancia(rs.getDouble("Ganancia"));
 	        		        	
 	        	array.add(aux);	        	
 	        }

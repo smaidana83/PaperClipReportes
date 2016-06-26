@@ -13,6 +13,7 @@ import valueObject.VOFlujoCaja;
 import valueObject.VOMoneda;
 import valueObject.VOPresupuesto;
 import valueObject.VORankingVentas;
+import valueObject.VORankingVentasConGanancia;
 import valueObject.VOTotalEnCajaDesgloce;
 import valueObject.VOTotalEnCajaDesglocePorFecha;
 
@@ -89,6 +90,14 @@ public class Logica implements Serializable{
 			return datos.RankingVentasPorFecha(top, Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
 		}else{
 			return datos.RankingVentasPorFecha(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		}
+	}
+	
+	public ArrayList<VORankingVentasConGanancia> RankingVentasPorFechaConGanancia(int top, Date fechaInicial, Date fechaFinal){
+		if(top != 0){
+			return datos.RankingVentasPorFechaConGanancia(top, Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
+		}else{
+			return datos.RankingVentasPorFechaConGanancia(Utils.convertDateToString(fechaInicial), Utils.convertDateToString(fechaFinal));
 		}
 	}
 
