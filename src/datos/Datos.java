@@ -34,10 +34,10 @@ public class Datos implements Serializable{
 	 * Establece la conexion con el driver jdbc
 	 */
 	private Connection getConnection() throws ClassNotFoundException, SQLException{
-		String username = "readOnly";
+		String username = "ro";
 		String password = "ro";	
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-		String url = "jdbc:sqlserver://localhost\\MSSQLEXPRESS:49221;databaseName=GestionIntegral20;";		
+		String url = "jdbc:sqlserver://localhost\\MSSQLEXPRESS:49218;databaseName=GestionIntegral25;";		
 		Connection conn = DriverManager.getConnection(url,username,password);
 		return conn;
 	}
